@@ -1,17 +1,18 @@
 <template>
   <div class="layout">
     <div class="header">
-      header
+      <v-header />
     </div>
     <div class="sidebar">
-      sidebar
+      <v-side />
     </div>
     <div class="content">
       <div class="body">
         <router-view/>
       </div>
       <div class="footer">
-        Copyright @粤ICP2021TEST第666号, 版权所有@侵权必究
+        <span>Author: wuhua</span>
+        <span>QQ: 1007710266</span>
       </div>
     </div>
   </div>
@@ -19,9 +20,13 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
+import vHeader from './header.vue';
+import vSide from './sidebar.vue';
 export default defineComponent({
   name: 'layout',
+  components: {
+    vHeader, vSide
+  },
   data() {
     return {
 
@@ -44,23 +49,23 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
   }
-  .header {
+  .layout > .header {
     position: absolute;
-    left: 0;
+    left: 261px;
     top: 0;
     right: 0;
     height: 60px;
     border-bottom: 1px solid #ddd;
   }
-  .sidebar {
+  .layout > .sidebar {
     position: absolute;
     left: 0;
-    top: 61px;
+    top: 0;
     width: 260px;
     bottom: 0;
     border-right: 1px solid #ddd;
   }
-  .content {
+  .layout > .content {
     position: absolute;
     top: 61px;
     right: 0;
@@ -68,20 +73,29 @@ export default defineComponent({
     bottom: 0;
     overflow: auto;
   }
-  .body {
+  .layout > .content > .body {
     min-height: calc(100% - 75px);
     padding: 12px 12px;
   }
   .footer {
     height: 50px;
-    border-top: 1px solid #eee;
     text-align: center;
-    margin: 0 12px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     font-size: 12px;
     color: #999;
+  }
+  .footer > span {
+    display: inline-block;
+    padding-left: 12px;
+    margin-left: 12px;
+    border-left: 1px solid #ddd;
+  }
+  .footer > span:first-child {
+    border-left: 0;
+    padding-left: 0;
+    margin-left: 0;
   }
 </style>
 <style>
