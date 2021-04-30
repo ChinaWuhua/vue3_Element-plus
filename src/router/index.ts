@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-
+import pagesRoute from './pages/index'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -10,11 +10,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         redirect: 'home'
       },
-      {
-        path: 'home',
-        name: 'home',
-        component: () => import('../views/Home.vue')
-      }
+      ...pagesRoute
     ]
   }
 ]
