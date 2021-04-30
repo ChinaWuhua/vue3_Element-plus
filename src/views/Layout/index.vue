@@ -54,7 +54,7 @@ export default defineComponent({
     left: 261px;
     top: 0;
     right: 0;
-    height: 60px;
+    height: 50px;
     border-bottom: 1px solid #ddd;
   }
   .layout > .sidebar {
@@ -67,7 +67,7 @@ export default defineComponent({
   }
   .layout > .content {
     position: absolute;
-    top: 61px;
+    top: 51px;
     right: 0;
     left: 261px;
     bottom: 0;
