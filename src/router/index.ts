@@ -12,6 +12,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       ...pagesRoute
     ]
+  }, {
+    path: '/404',
+    name: '404',
+    component: () => import('../views/Error/err_404.vue'),
+  }, {
+    path: '/:pathMatch(.*)',
+    redirect: '/404'
   }
 ]
 

@@ -6,12 +6,10 @@
     </div>
     <div class="sidebar-wrap">
       <el-menu
-        :uniqueOpened="true"
         default-active="2"
         class="el-menu-vertical-demo"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b">
+        text-color="#666"
+        active-text-color="#f10215">
         <el-submenu index="1">
           <template #title>
             <i class="el-icon-location"></i>
@@ -80,7 +78,6 @@ export default defineComponent({
   .sidebar-content {
     position: relative;
     height: 100%;
-    background: #545c64;
     overflow: hidden;
   }
   .logo {
@@ -88,18 +85,21 @@ export default defineComponent({
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: #d5850f;
+    color: #f10215;
     font-size: 20px;
     padding: 0 24px;
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    box-shadow: 0 0 6px #eee;
+    z-index: 2;
   }
   .logo span {
     font-size: 12px;
     margin: 5px 0 0 5px;
     letter-spacing: 2px;
-    color: #ff9900;
+    color: #f10215;
     opacity: .7;
   }
   .sidebar-wrap {
@@ -109,6 +109,7 @@ export default defineComponent({
     right: 0;
     bottom: 0;
     overflow: auto;
+    z-index: 1;
   }
 </style>
 <style>
