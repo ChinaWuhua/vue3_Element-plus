@@ -51,7 +51,7 @@ export default defineComponent({
   }
   .layout > .header {
     position: absolute;
-    left: 261px;
+    left: 0;
     top: 0;
     right: 0;
     height: 50px;
@@ -69,9 +69,13 @@ export default defineComponent({
     position: absolute;
     top: 51px;
     right: 0;
-    left: 261px;
+    left: 0;
     bottom: 0;
     overflow: auto;
+  }
+  .layout .sidebar + .content,
+  .layout .sidebar + .header {
+    left: 261px;
   }
   .layout > .content > .body {
     min-height: calc(100% - 75px);
@@ -113,18 +117,15 @@ export default defineComponent({
     outline: none;
   }
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background-color: #ccc;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    background-color: #ddd;
   }
   ::-webkit-scrollbar-thumb {
     background-color: #999;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
   }
 </style>
