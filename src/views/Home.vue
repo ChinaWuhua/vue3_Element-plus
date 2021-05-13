@@ -12,7 +12,7 @@
         <img src="./bg.jpg" />
         <div class="BtnBox">
 
-          <div class="areaBtn btn_1">
+          <div class="areaBtn btn_1" @click="toLink('https://juejin.cn/')">
             <span class="icon"></span>
             <div class="tip">
               <div class="tip-title">制剂生产车间</div>
@@ -20,7 +20,7 @@
             </div>
           </div>
 
-          <div class="areaBtn btn_2">
+          <div class="areaBtn btn_2" @click="toLink('https://www.w3school.com.cn/')">
             <span class="icon"></span>
             <div class="tip">
               <div class="tip-title">研发车间及质检车间</div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="areaBtn btn_3">
+          <div class="areaBtn btn_3" @click="toLink('http://www.qq.com')">
             <span class="icon"></span>
             <div class="tip">
               <div class="tip-title">生产车间</div>
@@ -59,6 +59,9 @@ export default defineComponent({
     }
   },
   methods: {
+    toLink(link: any) {
+      window.open(link, "_blank")
+    },
     mousewheel(e: any) {
       e = e || window.event;
       e.preventDefault && e.preventDefault(); //禁止滚动
