@@ -1,12 +1,12 @@
 <template>
   <div class="layout">
-    <div class="header">
-      <v-header />
-    </div>
     <div class="sidebar">
       <v-side />
     </div>
     <div class="content">
+      <div class="header">
+        <v-header />
+      </div>
       <div class="body">
         <router-view/>
       </div>
@@ -49,14 +49,6 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
   }
-  .layout > .header {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    height: 50px;
-    border-bottom: 1px solid #ddd;
-  }
   .layout > .sidebar {
     position: absolute;
     left: 0;
@@ -67,15 +59,27 @@ export default defineComponent({
   }
   .layout > .content {
     position: absolute;
-    top: 51px;
+    top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     overflow: auto;
   }
-  .layout .sidebar + .content,
-  .layout .sidebar + .header {
+  .layout .sidebar + .content {
     left: 261px;
+  }
+  .layout > .content > .header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 50px;
+    border-bottom: 1px solid #ddd;
+    z-index: 2;
+    background: #fff;
+  }
+  .layout > .content > .header + .body {
+    margin-top: 51px;
   }
   .layout > .content > .body {
     min-height: calc(100% - 75px);

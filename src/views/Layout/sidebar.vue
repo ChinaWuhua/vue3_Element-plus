@@ -1,15 +1,15 @@
 <template>
   <div class="sidebar-content">
     <div class="logo">
-      JD.COM
-      <span>多快好省</span>
+      BYD
+      <span>-- build your dreams</span>
     </div>
     <div class="sidebar-wrap">
       <el-menu
         default-active="2"
         class="el-menu-vertical-demo"
         text-color="#666"
-        active-text-color="#f10215">
+        active-text-color="#ff9900">
         <el-submenu index="1">
           <template #title>
             <i class="el-icon-location"></i>
@@ -61,15 +61,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
+import { mapGetters } from 'vuex'
 export default defineComponent({
   name: 'side-item',
+  computed: {
+    ...mapGetters(['menu']),
+  },
   data() {
     return {
-      sideData: [
-        {label: '首页'}
-      ]
     }
+  },
+  mounted() {
+    console.log(this.menu)
+  },
+  methods: {
   }
 })
 </script>
@@ -85,7 +90,7 @@ export default defineComponent({
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: #f10215;
+    color: #ff9900;
     font-size: 20px;
     padding: 0 24px;
     position: absolute;
@@ -98,9 +103,7 @@ export default defineComponent({
   .logo span {
     font-size: 12px;
     margin: 5px 0 0 5px;
-    letter-spacing: 2px;
-    color: #f10215;
-    opacity: .7;
+    color: #ff9900;
   }
   .sidebar-wrap {
     position: absolute;
