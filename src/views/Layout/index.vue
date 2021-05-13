@@ -1,19 +1,19 @@
 <template>
   <div class="layout">
-    <div class="sidebar">
+    <!-- <div class="sidebar">
       <v-side />
-    </div>
+    </div> -->
     <div class="content">
-      <div class="header">
+      <!-- <div class="header">
         <v-header />
-      </div>
+      </div> -->
       <div class="body">
         <router-view/>
       </div>
-      <div class="footer">
+      <!-- <div class="footer">
         <span>Author: wuhua</span>
         <span>QQ: 1007710266</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -65,7 +65,8 @@ export default defineComponent({
     bottom: 0;
     overflow: auto;
   }
-  .layout .sidebar + .content {
+  .layout .sidebar + .content,
+  .layout .sidebar + .content > .header {
     left: 261px;
   }
   .layout > .content > .header {

@@ -72,7 +72,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(this.menu)
+    // console.log(this.menu)
   },
   methods: {
   }
