@@ -5,10 +5,12 @@
       <div
         :style="{transform: `scale(${scale})`}"
         class="main"
-        @mouseleave="mouseleave"
+        @touchstart="touchEvent"
+        >
+        <!-- @mouseleave="mouseleave"
         @mouseover="mouseover"
         @mousedown="mousedown"
-        @mousewheel="mousewheel">
+        @mousewheel="mousewheel" -->
         <img src="./bg.jpg" />
         <div class="BtnBox">
 
@@ -39,6 +41,9 @@
         </div>
       </div>
     </div>
+    <div class="debugging">
+      debugging
+    </div>
   </div>
 </template>
 
@@ -56,10 +61,17 @@ export default defineComponent({
       scale: 1,
       site_x: 0,
       site_y: 0,
+      touch: [],
     }
   },
   methods: {
+    // 手机端事件 touch
+    touchEvent(e: any) {
+      console.log(e)
+    },
+    // PC端事件 click, mouse
     toLink(link: any) {
+      return false;
       window.open(link, "_blank")
     },
     mousewheel(e: any) {
@@ -97,11 +109,20 @@ export default defineComponent({
 
 
 <style scoped>
+.debugging {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  background: #fff;
+  color: #333;
+  font-size: 12px;
+}
 .container {
   position: relative;
   overflow: hidden;
-  width: 800px;
-  height: 500px;
+  height: 400px;
   border-radius: 5px;
   box-shadow: 0 0 6px #ccc;
   background: #eee;
