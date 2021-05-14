@@ -109,6 +109,7 @@ export default defineComponent({
 </style>
 <style>
   html, body{
+    /* touch-action: none;  */
     margin: 0;
     padding: 0;
     font-size: 14px;
