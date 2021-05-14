@@ -1,14 +1,15 @@
 <template>
   <div class="home">
-    <div class="container">
+    <div 
+      class="container"
+      @touchstart="touchStart"
+      @touchmove="touchMove"
+      @touchend="touchEnd">
       <div
         :style="{ 
           transform: `scale(${scale}) translateX(${_x_}px) translateY(${_y_}px)`
         }"
         class="main"
-        @touchstart="touchStart"
-        @touchmove="touchMove"
-        @touchend="touchEnd"
       >
         <img src="./bg.jpg" />
         <div class="BtnBox">
