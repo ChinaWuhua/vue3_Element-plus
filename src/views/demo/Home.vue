@@ -1,14 +1,18 @@
 <template>
   <div class="home">
     <div
-      class="container">
+      class="container"
+      @mousemove="mousemove"
+      @mouseup="mouseup"
+      @mousedown="mousedown"
+      @mousewheel="mousewheel">
       <div
-        :style="{transform: `scale(${scale})`}"
-        class="main"
-        @mouseleave="mouseleave"
-        @mouseover="mouseover"
-        @mousedown="mousedown"
-        @mousewheel="mousewheel">
+        :style="{ 
+          transform: `scale(${scale})`,
+          left: `${_x_}px`,
+          top: `${_y_}px`
+        }"
+        class="main">
         <img src="./bg.jpg" />
         <div class="BtnBox">
 
@@ -54,8 +58,14 @@ export default defineComponent({
   data() {
     return {
       scale: 1,
-      site_x: 0,
-      site_y: 0,
+      _x_: 0,
+      _y_: 0,
+      touch: null,
+      lastSite: {
+        x: 0,
+        y: 0
+      },
+      drag: false,
     }
   },
   methods: {
@@ -81,8 +91,26 @@ export default defineComponent({
         this.toMin()
       }
     },
+    mousemove(e: any) {
+      if (!this.drag) {
+        return false
+      }
+      let to: any = e
+      let start: any = this.touch
+      let {x, y} = this.lastSite
+      this._x_ = to.pageX - start.pageX + x
+      this._y_ = to.pageY - start.pageY + y
+    },
     mousedown(e: any) {
-      // console.log(e)
+      this.touch = e
+      this.drag = true
+    },
+    mouseup() {
+      this.drag = false
+      this.lastSite = {
+        x: this._x_,
+        y: this._y_
+      }
     },
     showText(text: any) {
       alert(text)
