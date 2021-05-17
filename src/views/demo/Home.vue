@@ -3,6 +3,7 @@
     <div
       class="container"
       @mousemove="mousemove"
+      @mouseleave="mouseup"
       @mouseup="mouseup"
       @mousedown="mousedown"
       @mousewheel="mousewheel">
@@ -70,9 +71,8 @@ export default defineComponent({
   },
   methods: {
     toLink(text: any) {
-      // window.open(link, "_blank")
       this.$router.push({
-        path: '/detail',
+        path: '/home/detail',
         query: {
           text
         }
@@ -142,6 +142,11 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-content: center;
+  -moz-user-select:none; /*火狐*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -ms-user-select:none; /*IE10*/
+  -khtml-user-select:none; /*早期浏览器*/
+  user-select:none;
 }
 .main {
   position: relative;

@@ -1,22 +1,34 @@
 export default [
   {
-    path: 'home',
+    path: '/home',
     name: 'home',
-    component: () => import('@/views/demo/Home.vue')
+    component: () => import('@/views/demo/Home.vue'),
+    meta: {
+      label: '首页'
+    }
   },
   {
-    path: 'home-touch',
+    path: '/home/detail',
+    name: 'home-detail',
+    component: () => import('@/views/demo/detail.vue'),
+    meta: {
+      label: '厂房详情介绍'
+    }
+  },
+  {
+    path: '/home-touch',
     name: 'home-touch',
-    component: () => import('@/views/demo/Home-touch.vue')
+    component: () => import('@/views/demo/Home-touch.vue'),
+    meta: {
+      label: '手机端首页'
+    }
   },
   {
-    path: 'detail',
-    name: 'detail',
-    component: () => import('@/views/demo/detail.vue')
-  },
-  {
-    path: 'charts',
+    path: '/charts',
     name: 'charts',
-    component: () => import('@/views/demo/charts.vue')
+    component: () => import('@/views/demo/charts.vue'),
+    meta: {
+      label: '图表'
+    }
   }
 ]

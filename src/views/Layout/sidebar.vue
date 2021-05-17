@@ -80,18 +80,31 @@ export default defineComponent({
   name: 'side-item',
   computed: {
     ...mapGetters(['menu']),
-    activeRoute(): String {
-      return this?.$route?.path
+    // routeData() {
+    //   return this.$router.options?.routes[0]?.children || []
+    // }
+  },
+  watch: {
+    $route(to) {
+      this.getActive(to.path)
     }
   },
   data() {
     return {
+      activeRoute: '',
     }
   },
   mounted() {
-    
+    !this.activeRoute ? this.getActive(this.$route.path) : ''
   },
   methods: {
+    getActive(path: String) {
+      let paths: any[]
+      paths = path.split('/')
+      paths.splice(0,1)
+      paths.splice(paths.length - 1,1)
+      this.activeRoute = `${paths[0] ? '/'+paths[0] : path}`
+    }
   }
 })
 </script>
