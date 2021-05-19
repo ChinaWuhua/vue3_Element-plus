@@ -12,18 +12,18 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <el-menu-item index="/home">
+        <el-menu-item v-for="(item) for siderData" :key="item.path">
           <i class="el-icon-house"></i>
           厂房区域介绍
         </el-menu-item>
-        <el-menu-item index="/charts">
+        <!-- <el-menu-item index="/charts">
           <i class="el-icon-data-analysis"></i>
           温度监控
         </el-menu-item>
         <el-menu-item index="/home-touch">
           <i class="el-icon-phone"></i>
           手机端
-        </el-menu-item>
+        </el-menu-item> -->
         <!-- <el-submenu index="1">
           <template #title>
             <i class="el-icon-location"></i>
@@ -76,6 +76,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
+let  tsArray: number[] = [1,1,2,3,4]
 export default defineComponent({
   name: 'side-item',
   computed: {
@@ -87,17 +88,30 @@ export default defineComponent({
   watch: {
     $route(to) {
       this.getActive(to.path)
+    },
+    menu(value) {
+      console.log(value)
     }
   },
   data() {
     return {
-      activeRoute: '',
+      activeRoute: ''
     }
   },
   mounted() {
+    this.setMenu()
     !this.activeRoute ? this.getActive(this.$route.path) : ''
   },
   methods: {
+    setMenu() {
+      let data =  [
+        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+      ]
+      // console.log(this)
+      this.$store.dispatch('createMenu', data)
+    },
     getActive(path: String) {
       let paths: any[]
       paths = path.split('/')
