@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
 import * as echarts from 'echarts';
 
@@ -22,14 +22,14 @@ export default defineComponent({
   methods: {
     setCharts_1() {
       let dom = this.$refs['chart-1'];
-      var myChart = echarts.init(dom as HTMLCanvasElement);
+      var myChart = echarts.init(dom);
       myChart.setOption({
         title: {
             text: '温度监控(单位:℃)'
         },
         tooltip: {
             trigger: 'axis',
-            formatter: (params: any) => {
+            formatter: (params) => {
               let res = params[0]
               return `
                 <span>${res.marker}</span>
@@ -54,7 +54,7 @@ export default defineComponent({
     },
     setCharts_2() {
       let dom = this.$refs['chart-1'];
-      var myChart = echarts.init(dom as HTMLCanvasElement);
+      var myChart = echarts.init(dom);
       myChart.setOption({
         title: {
             text: '温度记录(单位:℃)'

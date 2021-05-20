@@ -10,8 +10,8 @@
       <div
         :style="{ 
           transform: `scale(${scale})`,
-          left: `${_x_}px`,
-          top: `${_y_}px`
+          left: `${x_now}px`,
+          top: `${y_now}px`
         }"
         class="main">
         <img src="./bg.jpg" />
@@ -47,20 +47,16 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default defineComponent({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
   data() {
     return {
       scale: 1,
-      _x_: 0,
-      _y_: 0,
+      x_now: 0,
+      y_now: 0,
       touch: null,
       lastSite: {
         x: 0,
@@ -70,7 +66,7 @@ export default defineComponent({
     }
   },
   methods: {
-    toLink(text: any) {
+    toLink(text) {
       this.$router.push({
         path: '/home/detail',
         query: {
@@ -78,7 +74,7 @@ export default defineComponent({
         }
       })
     },
-    mousewheel(e: any) {
+    mousewheel(e) {
       e = e || window.event;
       e.preventDefault && e.preventDefault(); //禁止滚动
       let event = e.wheelDelta || e.detail; // 浏览器兼容
@@ -91,28 +87,28 @@ export default defineComponent({
         this.toMin()
       }
     },
-    mousemove(e: any) {
+    mousemove(e) {
       if (!this.drag) {
         return false
       }
-      let to: any = e
-      let start: any = this.touch
+      let to = e
+      let start = this.touch
       let {x, y} = this.lastSite
-      this._x_ = to.pageX - start.pageX + x
-      this._y_ = to.pageY - start.pageY + y
+      this.x_now = to.pageX - start.pageX + x
+      this.y_now = to.pageY - start.pageY + y
     },
-    mousedown(e: any) {
+    mousedown(e) {
       this.touch = e
       this.drag = true
     },
     mouseup() {
       this.drag = false
       this.lastSite = {
-        x: this._x_,
-        y: this._y_
+        x: this.x_now,
+        y: this.y_now
       }
     },
-    showText(text: any) {
+    showText(text) {
       alert(text)
     },
     toMax() {

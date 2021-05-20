@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import pagesRoute from './pages/index'
-const routes: Array<RouteRecordRaw> = [
+const routes = [
   {
     path: '/',
     name: 'Layout',
@@ -12,13 +12,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       ...pagesRoute
     ]
-  }, {
-    path: '/404',
-    name: '404',
-    component: () => import('../views/Error/err_404.vue'),
-  }, {
-    path: '/:pathMatch(.*)',
-    redirect: '/404'
   }
 ]
 

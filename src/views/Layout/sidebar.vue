@@ -12,9 +12,9 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <el-menu-item v-for="(item) for siderData" :key="item.path">
-          <i class="el-icon-house"></i>
-          厂房区域介绍
+        <el-menu-item v-for="item in arr" :key="item.path" :index="item.path">
+          <i :class="item.icon"></i>
+          {{item.label}}
         </el-menu-item>
         <!-- <el-menu-item index="/charts">
           <i class="el-icon-data-analysis"></i>
@@ -76,7 +76,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
-let  tsArray: number[] = [1,1,2,3,4]
 export default defineComponent({
   name: 'side-item',
   computed: {
@@ -95,7 +94,13 @@ export default defineComponent({
   },
   data() {
     return {
-      activeRoute: ''
+      activeRoute: '',
+      arr: [
+        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+        {label: '附件预览', icon: 'el-icon-folder', path: '/preview'},
+      ]
     }
   },
   mounted() {
@@ -104,16 +109,16 @@ export default defineComponent({
   },
   methods: {
     setMenu() {
-      let data =  [
-        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
-        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
-        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
-      ]
+      // let data =  [
+      //   {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+      //   {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+      //   {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+      // ]
       // console.log(this)
-      this.$store.dispatch('createMenu', data)
+      // this.$store.dispatch('createMenu', data)
     },
-    getActive(path: String) {
-      let paths: any[]
+    getActive(path) {
+      let paths = [];
       paths = path.split('/')
       paths.splice(0,1)
       paths.splice(paths.length - 1,1)

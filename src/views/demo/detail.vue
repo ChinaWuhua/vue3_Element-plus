@@ -11,13 +11,13 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'detail',
   computed: {
-    text(): any {
+    text() {
       return this.$route?.query?.text
     }
   },
