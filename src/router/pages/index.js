@@ -31,12 +31,4 @@ export default [
       label: '图表'
     }
   },
-  {
-    path: '/preview',
-    name: 'preview',
-    component: () => import('@/views/preview/index.vue'),
-    meta: {
-      label: '文件预览'
-    }
-  }
 ]
