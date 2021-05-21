@@ -3,6 +3,7 @@
     <div></div>
     <el-dropdown>
       <span class="user-box">
+        <i class="el-icon-user" style="margin-right: 8px;"></i>
         {{userInfo?.user?.Username}}
       </span>
       <template #dropdown>

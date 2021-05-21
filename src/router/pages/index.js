@@ -2,33 +2,16 @@ export default [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/views/demo/Home.vue'),
+    component: () => import('@/views/Home/index.vue'),
     meta: {
       label: '首页'
     }
-  },
-  {
-    path: '/home/detail',
-    name: 'home-detail',
-    component: () => import('@/views/demo/detail.vue'),
+  }, {
+    path: '/user',
+    name: 'user',
+    component: () => import('@/views/User/index.vue'),
     meta: {
-      label: '厂房详情介绍'
-    }
-  },
-  {
-    path: '/home-touch',
-    name: 'home-touch',
-    component: () => import('@/views/demo/Home-touch.vue'),
-    meta: {
-      label: '手机端首页'
-    }
-  },
-  {
-    path: '/charts',
-    name: 'charts',
-    component: () => import('@/views/demo/charts.vue'),
-    meta: {
-      label: '图表'
+      label: '用户管理'
     }
   },
 ]

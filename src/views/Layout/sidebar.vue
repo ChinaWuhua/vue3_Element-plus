@@ -46,11 +46,9 @@ export default defineComponent({
   methods: {
     setMenu() {
       let data =  [
-        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
-        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
-        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+        {label: '首页', icon: 'el-icon-house', path: '/home'},
+        {label: '用户管理', icon: 'el-icon-user', path: '/user'},
       ]
-      console.log(this)
       this.$store.dispatch('createMenu', data)
     },
     getActive(path) {

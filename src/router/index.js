@@ -11,7 +11,15 @@ const routes = [
         path: '/',
         redirect: 'home'
       },
-      ...pagesRoute
+      ...pagesRoute,
+      {
+        path: '/404',
+        name: '404',
+        component: () => import('../views/Error/err_404.vue'),
+      }, {
+        path: '/:pathMatch(.*)',
+        redirect: '/404'
+      }
     ]
   }, {
     path: '/login',
