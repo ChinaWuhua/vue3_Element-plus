@@ -9,9 +9,9 @@ module.exports = {
         target: 'http://45.32.111.201:7999',
         ws: true,
         changOrigin: true,//允许跨域
-        pathRewrite: {
-          '^/api': '' 
-        }
+        // pathRewrite: {
+        //   '^/api': '' 
+        // }
       }
     }
   }
