@@ -5,6 +5,7 @@
     </div>
     <div class="content">
       <div class="header">
+        <i class="el-icon-more menuBtn"></i>
         <v-header />
       </div>
       <div class="body">
@@ -27,14 +28,6 @@ export default defineComponent({
   components: {
     vHeader, vSide
   },
-  data() {
-    return {
-
-    }
-  },
-  methods: {
-
-  }
 })
 </script>
 
@@ -67,7 +60,7 @@ export default defineComponent({
   }
   .layout .sidebar + .content,
   .layout .sidebar + .content > .header {
-    left: 261px;
+    left: 260px;
   }
   .layout > .content > .header {
     position: fixed;
@@ -83,7 +76,7 @@ export default defineComponent({
     margin-top: 51px;
   }
   .layout > .content > .body {
-    min-height: calc(100% - 75px);
+    min-height: calc(100% - 127px);
     padding: 12px 12px;
   }
   .footer {
@@ -105,6 +98,26 @@ export default defineComponent({
     border-left: 0;
     padding-left: 0;
     margin-left: 0;
+  }
+  .menuBtn {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    display: none;
+  }
+  @media screen and (max-width: 800px) {
+    .layout > .sidebar {
+      transform: translateX(-100%);
+    }
+    .layout .sidebar + .content,
+    .layout .sidebar + .content > .header {
+      left: 0;
+    }
+    .menuBtn {
+      display: inline-block;
+    }
   }
 </style>
 <style>

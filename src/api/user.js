@@ -9,5 +9,14 @@ export default {
         password,
       }
     })
+  },
+  Logout({username = ''}) {
+    return ajax({
+      method: 'post',
+      url: '/logout',
+      data: {
+        username
+      }
+    })
   }
 }

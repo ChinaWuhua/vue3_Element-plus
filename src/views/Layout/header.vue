@@ -3,18 +3,43 @@
     <div></div>
     <el-dropdown>
       <span class="user-box">
-        <span>管</span>
-        管理员
+        {{userInfo?.user?.Username}}
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item><i class="el-icon-user"></i>个人中心</el-dropdown-item>
-          <el-dropdown-item><i class="el-icon-switch-button"></i>退出登录</el-dropdown-item>
+          <el-dropdown-item @click="logout"><i class="el-icon-switch-button"></i>退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
   </div>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
+import api from "@/api/user"
+export default defineComponent({
+  computed: {
+    ...mapGetters(['userInfo']),
+  },
+  methods: {
+    logout() {
+      api
+        .Logout({ username: this.userInfo?.user?.Username })
+        .then(() => {
+          localStorage.setItem('userInfo', null)
+          this.$store.dispatch('createUserInfo', null)
+          this.$router.push('/login')
+        })
+        .catch((err) => {
+          this.$alert(err.msg, '提示', {
+            confirmButtonText: '知道了',
+          });
+        });
+    }
+  }
+})
+</script>
 
 <style scoped>
   .header-wrap {
@@ -28,18 +53,5 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-  }
-  .user-box span {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
-    background: #efefef;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 8px;
-    border: 2px solid #ddd;
-    color: #999;
   }
 </style>

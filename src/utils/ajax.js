@@ -1,6 +1,6 @@
 import axios from 'axios'
 export default function request(params) {
-  return new Promise((resolve, reject) => { // resolve, reject
+  return new Promise((resolve, reject) => {
     axios({
       ...params, 
       url: '/api' + params.url

@@ -1,4 +1,5 @@
 export default {
-  menu: (state) => state.layout.MENU_DATA,
-  active_route: (state) => state.layout.ACTIVE_ROUTE,
+  menu: (state) => state.MENU_DATA,
+  active_route: (state) => state.ACTIVE_ROUTE,
+  userInfo: (state) => state.userInfo
 }

@@ -12,7 +12,7 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <el-menu-item v-for="item in arr" :key="item.path" :index="item.path">
+        <el-menu-item v-for="item in menu" :key="item.path" :index="item.path">
           <i :class="item.icon"></i>
           {{item.label}}
         </el-menu-item>
@@ -28,26 +28,15 @@ export default defineComponent({
   name: 'side-item',
   computed: {
     ...mapGetters(['menu']),
-    // routeData() {
-    //   return this.$router.options?.routes[0]?.children || []
-    // }
   },
   watch: {
     $route(to) {
       this.getActive(to.path)
     },
-    menu(value) {
-      console.log(value)
-    }
   },
   data() {
     return {
       activeRoute: '',
-      arr: [
-        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
-        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
-        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
-      ]
     }
   },
   mounted() {
@@ -56,13 +45,13 @@ export default defineComponent({
   },
   methods: {
     setMenu() {
-      // let data =  [
-      //   {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
-      //   {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
-      //   {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
-      // ]
-      // console.log(this)
-      // this.$store.dispatch('createMenu', data)
+      let data =  [
+        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+      ]
+      console.log(this)
+      this.$store.dispatch('createMenu', data)
     },
     getActive(path) {
       let paths = [];
