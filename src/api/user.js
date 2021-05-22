@@ -11,7 +11,6 @@ export default {
       }
     })
   },
-
   // 登出
   Logout({username = ''}) {
     return ajax({
@@ -47,6 +46,16 @@ export default {
     return ajax({
       method: 'post',
       url: '/api/user/all',
+      data: {
+        ...params
+      }
+    })
+  },
+  // 更新用户信息
+  updateUser(params = {}) {
+    return ajax({
+      method: 'post',
+      url: '/api/user/update',
       data: {
         ...params
       }

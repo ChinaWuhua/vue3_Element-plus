@@ -47,12 +47,13 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          width="220"
+          width="250"
           label="操作">
           <template #default="scope">
             <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
             <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
-            <el-button type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
+            <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
+            <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,6 +78,11 @@
 <script>
 import api from "@/api/user";
 export default {
+  computed: {
+    Username() {
+      return this.$store.state.userInfo.user.Username
+    }
+  },
   data() {
     return {
       loading: false,
@@ -133,9 +139,10 @@ export default {
         })
     },
     toDetail(mode, row) {
+      let data = JSON.stringify(row)
       this.$router.push({
         name: 'user-add',
-        params: { mode, row }
+        params: { mode, data }
       })
     },
     handleSizeChange(val) {
