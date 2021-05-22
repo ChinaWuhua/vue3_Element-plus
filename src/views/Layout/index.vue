@@ -52,11 +52,12 @@ export default defineComponent({
   }
   .layout > .content {
     position: absolute;
-    top: 0;
+    top: 51px;
     right: 0;
     left: 0;
     bottom: 0;
     overflow: auto;
+    padding: 20px 20px 0 20px;
   }
   .layout .sidebar + .content,
   .layout .sidebar + .content > .header {
@@ -72,12 +73,12 @@ export default defineComponent({
     z-index: 2;
     background: #fff;
   }
-  .layout > .content > .header + .body {
-    margin-top: 51px;
-  }
   .layout > .content > .body {
-    min-height: calc(100% - 127px);
-    padding: 12px 12px;
+    min-height: calc(100% - 90px);
+    padding: 20px 20px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #e9e9e9;
   }
   .footer {
     height: 50px;

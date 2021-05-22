@@ -13,5 +13,12 @@ export default [
     meta: {
       label: '用户管理'
     }
+  }, {
+    path: '/user/add',
+    name: 'user-add',
+    component: () => import('@/views/User/add.vue'),
+    meta: {
+      label: '新增用户'
+    }
   },
 ]

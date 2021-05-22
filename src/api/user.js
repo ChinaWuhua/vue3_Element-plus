@@ -29,13 +29,27 @@ export default {
       url: '/api/user/add',
       data: {
         ...params,
-        // Username: "test", 
-        // Password: "test", 
-        // Name: "test", 
-        // Email: "test", 
-        // Phone: "188", 
-        // Role: "2"
       }
     })
-  }
+  },
+  // 删除用户
+  userDelete(Username = '') {
+    return ajax({
+      method: 'post',
+      url: '/api/user/delete',
+      data: {
+        Username
+      }
+    })
+  },
+  // 查询用户列表
+  getUsetlist(params = {}) {
+    return ajax({
+      method: 'post',
+      url: '/api/user/all',
+      data: {
+        ...params
+      }
+    })
+  },
 }

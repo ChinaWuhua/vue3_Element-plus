@@ -20,4 +20,7 @@ time, mark, audio, video {
     padding: 0;
     border: 0;
 }
+body{
+  background: #f8f8f8;
+}
 </style>

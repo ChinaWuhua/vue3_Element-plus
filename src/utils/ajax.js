@@ -1,9 +1,8 @@
 import axios from 'axios'
 import store from '@/store/index'
 import router from '@/router/index'
-// import {ElMessage} from 'element-plus'
-const token = store?.state?.userInfo?.user?.token
 export default function request(params) {
+  const token = store?.state?.userInfo?.token
   return new Promise((resolve, reject) => {
     axios({
       ...params,
@@ -14,7 +13,6 @@ export default function request(params) {
         if (data.status === 200) {
           resolve(data)
         } else if (data.status === 401) {
-          // ElMessage.warning(data.msg)
           store.dispatch('createUserInfo', null)
           localStorage.setItem('userInfo', null)
           router.push('/login')
