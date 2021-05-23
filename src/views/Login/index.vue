@@ -68,7 +68,7 @@ export default {
             .Login({ username: this.ruleForm.username, password: this.ruleForm.password })
             .then((res) => {
               // 登录成功
-              localStorage.setItem('userInfo', JSON.stringify(res.data))
+              sessionStorage.setItem('userInfo', JSON.stringify(res.data))
               this.$store.dispatch('createUserInfo', res.data)
               this.permission[0] && this.$router.push(this.permission[0])
             })
@@ -84,7 +84,7 @@ export default {
       })
     },
     logout() {
-      localStorage.setItem('userInfo', null)
+      sessionStorage.setItem('userInfo', null)
       this.$store.dispatch('createUserInfo', null)
       this.loading = true;
       api

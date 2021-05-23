@@ -132,7 +132,11 @@ export default {
       this.pageData = this.$route.params?.data ? JSON.parse(this.$route.params?.data) : {}
       if (this.mode !== 'add') {
         for (let item in this.form) {
-          this.form[item] = this.pageData[item] || ''
+          if (item === 'Role') {
+            this.form[item] = this.pageData[item].map(menu => menu.name)
+          } else {
+            this.form[item] = this.pageData[item] || ''
+          }
         }
       }
     },

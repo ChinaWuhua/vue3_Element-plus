@@ -14,7 +14,7 @@ export default function request(params) {
           resolve(data)
         } else if (data.status === 401) {
           store.dispatch('createUserInfo', null)
-          localStorage.setItem('userInfo', null)
+          sessionStorage.setItem('userInfo', null)
           router.push('/login')
         } else (
           reject(data)

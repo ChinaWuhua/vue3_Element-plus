@@ -77,7 +77,7 @@ export default defineComponent({
       api
         .Logout({ username: this.userInfo?.user?.Username })
         .then(() => {
-          localStorage.setItem('userInfo', null)
+          sessionStorage.setItem('userInfo', null)
           this.$store.dispatch('createUserInfo', null)
           this.$router.push('/login')
         })
