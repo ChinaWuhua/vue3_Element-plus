@@ -1,6 +1,6 @@
 <template>
   <div class="search-form">
-    <el-row :gutter="20" v-show="show">
+    <el-row :gutter="20" v-show="show" style="margin-bottom: 20px;">
       <el-col
         v-for="item in searchItems" 
         :key="item.name"
@@ -36,7 +36,7 @@
         </div>
       </el-col>
     </el-row>
-    <div class="search-item" style="justify-content: flex-end;">
+    <div style="display: flex; justify-content: flex-end;">
       <el-button 
         type="primary" 
         icon="el-icon-search" 
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       form: {},
-      show: true,
+      show: false,
     }
   },
   created() {

@@ -24,10 +24,13 @@
         <el-form-item v-if="mode === 'add'" label="密码" prop="Password">
           <el-input :disabled="mode === 'view'" v-model="form.Password" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="Role">
-           <el-select :disabled="mode === 'view'" v-model="form.Role" style="width: 100%;">
-             <el-option label="管理员" :value="1"></el-option>
-             <el-option label="用户" :value="2"></el-option>
+        <el-form-item label="权限分配" prop="Role">
+           <el-select :disabled="mode === 'view'" v-model="form.Role" multiple style="width: 100%;">
+            <el-option 
+              v-for="item in menu" 
+              :key="item.key"
+              :label="item.label"
+              :value="item.name"></el-option>
            </el-select>
         </el-form-item>
         <el-form-item>
@@ -53,9 +56,11 @@
 
 <script>
 import api from "@/api/user";
+import { mapGetters } from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters(['menu']),
     title() {
       let obj = {
         add: '新增用户',
@@ -86,7 +91,7 @@ export default {
       loading: false,
       rules: {
         Username: [
-          { required: true, message: "请输入真实姓名", trigger: "blur" },
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         Name: [
           { required: true, message: "请输入真实姓名", trigger: "blur" },
@@ -102,6 +107,9 @@ export default {
         Password: [
           { required: true, message: "请设置密码", trigger: "blur" },
         ],
+        Role: [
+          { required: true, message: "请分配权限, 否则无法正常访问系统", trigger: "blur" },
+        ]
       },
       form: {
         Username: '',
@@ -129,19 +137,15 @@ export default {
       }
     },
     toUpdate() {
-      // let params = {}
-      // for (let item in this.form) {
-      //   if (this.form[item] !== this.pageData[item]) {
-      //     params[item] = this.form[item]
-      //   }
-      // }
-      // if (JSON.stringify(params) === '{}') {
-      //   return ;
-      // }
-      // params.Username = this.form.Username
+      let params = {
+        ...this.form,
+        Role: this.menu.filter( item => 
+          this.form.Role.includes(item.name)
+        )
+      }
       this.loading = true
       api
-        .updateUser(this.form)
+        .updateUser(params)
         .then(res => {
           this.loading = false
           this.tableData = res?.data?.users || []
@@ -166,9 +170,15 @@ export default {
             this.toUpdate();
             return ;
           }
+          let params = {
+            ...this.form,
+            Role: this.menu.filter( item => 
+              this.form.Role.includes(item.name)
+            )
+          }
           this.loading = true
           api
-            .userAdd(this.form)
+            .userAdd(params)
             .then(res => {
               this.loading = false
               this.tableData = res?.data?.users || []

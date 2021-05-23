@@ -26,12 +26,27 @@
           label="用户名">
         </el-table-column>
         <el-table-column
+          prop="Id"
+          label="ID"
+          min-width="200">
+        </el-table-column>
+        <el-table-column
           prop="Password"
           label="密码">
         </el-table-column>
         <el-table-column
           prop="Name"
           label="真实姓名">
+        </el-table-column>
+        <el-table-column
+          prop="Status"
+          label="账号状态">
+          <template #default="scope">
+            <el-tag 
+              :type="statusListStyle[scope.row.Status]">
+              {{ statusList[scope.row.Status] }}
+            </el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           prop="Email"
@@ -45,38 +60,52 @@
         </el-table-column>
         <el-table-column
           prop="Role"
-          label="角色">
+          min-width="100"
+          label="权限">
+          <template #default="scope">
+            <template v-if="scope.row.Name === 'admin'">
+              <el-tag type="success">超级管理员</el-tag>
+            </template>
+            <template v-else>
+              <el-tag 
+                v-for="item in scope.row.Role" 
+                :key="item.name">
+                {{item.label}}
+              </el-tag>
+            </template>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
           width="90"
           label="操作">
           <template #default="scope">
-            <el-dropdown>
-              <span class="el-dropdown-link">
-                <el-button type="text">操作选项<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-              </span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>
-                    <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-            <!-- <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
-            <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
-            <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
-            <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button> -->
+            <template v-if="scope.row.Name === 'admin'">
+              超级管理员
+            </template>
+            <template v-else>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  <el-button type="text">操作选项<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>
+                      <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -109,15 +138,14 @@ export default {
     return {
       loading: false,
       tableData: [],
+      statusList: ['停用', '正常'],
+      statusListStyle: ['info', 'success'],
       // 查询表单
       searchItems: [
         {name: 'Username', label: '用户名'}, 
         {name: 'Name', label: '真实姓名'}, 
         {name: 'Email', label: '邮箱'}, 
-        {name: 'Phone', label: '电话'}, 
-        // {name: 'Role', label: '角色', type: 'select', dicData: [
-        //   {label: '管理员', value: '1'}
-        // ]}
+        {name: 'Phone', label: '电话'},
       ],
       searchFrom: {},
       total: 10,

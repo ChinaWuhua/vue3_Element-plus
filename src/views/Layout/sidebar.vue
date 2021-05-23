@@ -1,8 +1,9 @@
 <template>
   <div class="sidebar-content">
     <div class="logo">
-      DEMO
-      <span>测试工程</span>
+      <i class="el-icon-goods" style="margin: 1px 6px 0 0;"></i>
+      电商管理系统
+      <span>ERP管理</span>
     </div>
     <div class="sidebar-wrap">
       <el-menu
@@ -12,10 +13,15 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <el-menu-item v-for="item in menu" :key="item.path" :index="item.path">
-          <i :class="item.icon"></i>
-          {{item.label}}
-        </el-menu-item>
+        <template v-for="item in menu">
+          <el-menu-item
+            :key="item.path" 
+            :index="item.path"
+            v-if="permission.includes(item.path)">
+            <i :class="item.icon"></i>
+            {{item.label}}
+          </el-menu-item>
+        </template>
       </el-menu>
     </div>
   </div>
@@ -27,7 +33,11 @@ import { mapGetters } from 'vuex'
 export default defineComponent({
   name: 'side-item',
   computed: {
-    ...mapGetters(['menu']),
+    ...mapGetters(['menu', 'userInfo']),
+    permission() {
+      let role = this.userInfo?.user?.Role
+      return role ? role.map(item => item.path) : []
+    },
   },
   watch: {
     $route(to) {
@@ -46,9 +56,9 @@ export default defineComponent({
   methods: {
     setMenu() {
       let data =  [
-        {label: '首页', icon: 'el-icon-house', path: '/home'},
-        {label: '用户管理', icon: 'el-icon-user', path: '/user'},
-        {label: '菜单管理', icon: 'el-icon-menu', path: '/menu'},
+        {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
+        {label: '用户管理', icon: 'el-icon-user', path: '/user', name: 'user'},
+        // {label: '菜单管理', icon: 'el-icon-menu', path: '/menu', name: 'menu'},
       ]
       this.$store.dispatch('createMenu', data)
     },
@@ -75,7 +85,7 @@ export default defineComponent({
     justify-content: flex-start;
     align-items: center;
     color: #fff;
-    font-size: 20px;
+    font-size: 16px;
     padding: 0 24px;
     position: absolute;
     top: 0;
@@ -84,10 +94,11 @@ export default defineComponent({
     z-index: 2;
     background: #545c64;
     border-bottom: 1px solid #4b4b4b;
+    text-shadow: 1px 1px 2px #2d2d2d;
   }
   .logo span {
     font-size: 12px;
-    margin: 5px 0 0 5px;
+    margin: 3px 0 0 5px;
     color: #fff;
   }
   .sidebar-wrap {

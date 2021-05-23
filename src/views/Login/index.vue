@@ -28,7 +28,14 @@
 
 <script>
 import api from "@/api/user";
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters(['userInfo']),
+    permission() {
+      return this.userInfo.user.Role.map(item => item.path)
+    },
+  },
   data() {
     return {
       loading: false,
@@ -63,7 +70,7 @@ export default {
               // 登录成功
               localStorage.setItem('userInfo', JSON.stringify(res.data))
               this.$store.dispatch('createUserInfo', res.data)
-              this.$router.push('/home')
+              this.permission[0] && this.$router.push(this.permission[0])
             })
             .catch((err) => {
               setTimeout(() => {

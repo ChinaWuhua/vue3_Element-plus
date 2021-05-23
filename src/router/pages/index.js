@@ -18,7 +18,14 @@ export default [
     name: 'user-add',
     component: () => import('@/views/User/add.vue'),
     meta: {
-      label: '新增用户'
+      label: '用户详情'
     }
-  },
+  }, {
+    path: '/menu',
+    name: 'menu',
+    component: () => import('@/views/Menu/index.vue'),
+    meta: {
+      label: '菜单管理'
+    }
+  }
 ]
