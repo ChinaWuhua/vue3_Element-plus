@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
 export default defineComponent({
@@ -48,6 +48,7 @@ export default defineComponent({
       let data =  [
         {label: '首页', icon: 'el-icon-house', path: '/home'},
         {label: '用户管理', icon: 'el-icon-user', path: '/user'},
+        {label: '菜单管理', icon: 'el-icon-menu', path: '/menu'},
       ]
       this.$store.dispatch('createMenu', data)
     },

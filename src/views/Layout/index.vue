@@ -1,11 +1,11 @@
 <template>
-  <div class="layout">
-    <div class="sidebar">
+  <div class="layout" @click="siderShow = false">
+    <div class="sidebar" :class="{'siderShow': siderShow}">
       <v-side />
     </div>
     <div class="content">
       <div class="header">
-        <i class="el-icon-more menuBtn"></i>
+        <i class="el-icon-more menuBtn" @click.stop="toggleSider"></i>
         <v-header />
       </div>
       <div class="body">
@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import vHeader from './header.vue';
 import vSide from './sidebar.vue';
@@ -28,6 +28,16 @@ export default defineComponent({
   components: {
     vHeader, vSide
   },
+  data() {
+    return {
+      siderShow: false,
+    }
+  },
+  methods: {
+    toggleSider() {
+      this.siderShow = !this.siderShow
+    }
+  }
 })
 </script>
 
@@ -49,6 +59,8 @@ export default defineComponent({
     width: 260px;
     bottom: 0;
     border-right: 1px solid #ddd;
+    transition: .3s;
+    z-index: 9;
   }
   .layout > .content {
     position: absolute;
@@ -118,6 +130,9 @@ export default defineComponent({
     }
     .menuBtn {
       display: inline-block;
+    }
+    .layout > .siderShow {
+      transform: translateX(0);
     }
   }
 </style>

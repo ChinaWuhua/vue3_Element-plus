@@ -35,11 +35,13 @@
         </el-table-column>
         <el-table-column
           prop="Email"
-          label="邮箱">
+          label="邮箱"
+          min-width="150">
         </el-table-column>
         <el-table-column
           prop="Phone"
-          label="电话">
+          label="电话"
+          width="120">
         </el-table-column>
         <el-table-column
           prop="Role"
@@ -47,13 +49,34 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          width="250"
+          width="90"
           label="操作">
           <template #default="scope">
-            <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <el-button type="text">操作选项<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>
+                    <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <!-- <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
             <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
             <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
-            <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
+            <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -61,8 +84,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="[10, 20, 50, 100]"
+          layout="total, prev, pager, next"
           :page-size="pageSize"
           :total="total"
           :current-page="currentPage"
@@ -93,9 +115,9 @@ export default {
         {name: 'Name', label: '真实姓名'}, 
         {name: 'Email', label: '邮箱'}, 
         {name: 'Phone', label: '电话'}, 
-        {name: 'Role', label: '角色', type: 'select', dicData: [
-          {label: '管理员', value: '1'}
-        ]}
+        // {name: 'Role', label: '角色', type: 'select', dicData: [
+        //   {label: '管理员', value: '1'}
+        // ]}
       ],
       searchFrom: {},
       total: 10,
