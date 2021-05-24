@@ -25,13 +25,18 @@
           <el-input :disabled="mode === 'view'" v-model="form.Password" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="权限分配" prop="Role">
-           <el-select :disabled="mode === 'view'" v-model="form.Role" multiple style="width: 100%;">
+          <div class="treeContain">
+            <el-input v-model="form.Role"></el-input>
+            <el-button type="primary" style="margin-left: 10px;">选择</el-button>
+          </div>
+          
+          <!-- <el-select :disabled="mode === 'view'" v-model="form.Role" multiple style="width: 100%;">
             <el-option 
               v-for="item in menu" 
               :key="item.key"
               :label="item.label"
               :value="item.name"></el-option>
-           </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item>
           <el-button
@@ -207,4 +212,9 @@ export default {
 </script>
 
 <style scoped>
+.treeContain {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>

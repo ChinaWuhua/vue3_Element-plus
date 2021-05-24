@@ -9,24 +9,19 @@ const routes = [
     name: 'Layout',
     component: () => import('../views/Layout/index.vue'),
     children: [
-      // {
-      //   path: '/',
-      //   redirect: 'home'
-      // },
       ...pagesRoute,
       {
-        path: '/404',
-        name: '404',
-        component: () => import('../views/Error/err_404.vue'),
-      }, {
         path: '/:pathMatch(.*)',
-        redirect: '/404'
+        name: 'not-found',
+        component: () => import('../views/Error/err_404.vue'),
+        meta: {notAuth: true}
       }
     ]
   }, {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login/index.vue'),
+    meta: {notAuth: true}
   }
 ]
 
@@ -39,15 +34,20 @@ router.beforeEach((to, from, next) => {
   let login = user.isLogin();
   const permisson = store.state.userInfo?.user?.Role.map(item => item.path)
   let child = permisson ? permisson.find(item => to.path.indexOf(item) >= 0 ) : undefined
-  if (to.path === '/login') {
+
+  if (to?.meta?.notAuth === true && to.name !== 'Layout') {
     next()
+  } else if (!login) {
+    next('/login')
   } else if ( permisson && !permisson.includes(to.path) && !child) {
     ElMessage.warning('您暂无权限访问该页面，请联系管理员')
-    from.name ? next(from.path) : next(permisson[0])
-  } else if (login) {
-    next()
+    if (from.name) {
+      next(from.path)
+    } else {
+      next(permisson[0])
+    }
   } else {
-    next('/login')
+    next()
   }
 })
 

@@ -30,10 +30,10 @@
           label="ID"
           min-width="200">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="Password"
           label="密码">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="Name"
           label="真实姓名">
@@ -122,7 +122,6 @@
         </el-pagination>
       </div>
     </div>
-    
   </div>
 </template>
 

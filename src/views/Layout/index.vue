@@ -33,6 +33,14 @@ export default defineComponent({
       siderShow: false,
     }
   },
+  mounted() {
+    window.addEventListener('storage', () => {
+      this.$alert('缓存数据已修改，请重新登录')
+      sessionStorage.setItem('userInfo', null)
+      this.$store.dispatch('createUserInfo', null)
+      this.$router.push('/login')
+    })
+  },
   methods: {
     toggleSider() {
       this.siderShow = !this.siderShow

@@ -13,16 +13,21 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <template v-for="item in menu">
-          <el-menu-item
-            :key="item.path" 
-            :index="item.path"
-            v-if="permission.includes(item.path)">
-            <i :class="item.icon"></i>
-            {{item.label}}
-          </el-menu-item>
+        <template v-for="item in menu" >
+          <template v-if="!item.children">
+            <el-menu-item
+              v-if="isAdmin || permission.includes(item.path)"
+              :key="item.path"
+              :index="item.path"
+              >
+              <i :class="item.icon"></i>
+              {{item.label}}
+            </el-menu-item>
+          </template>
+          <sidebar-item v-else :key="item.path" :menu-data="item" />
         </template>
       </el-menu>
+      
     </div>
   </div>
 </template>
@@ -30,7 +35,9 @@
 <script>
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
+import sidebarItem from "./sidebar-item";
 export default defineComponent({
+  components: { sidebarItem },
   name: 'side-item',
   computed: {
     ...mapGetters(['menu', 'userInfo']),
@@ -38,6 +45,9 @@ export default defineComponent({
       let role = this.userInfo?.user?.Role
       return role ? role.map(item => item.path) : []
     },
+    isAdmin() {
+      return this.userInfo?.user?.Username === 'admin'
+    }
   },
   watch: {
     $route(to) {
@@ -55,11 +65,12 @@ export default defineComponent({
   },
   methods: {
     setMenu() {
-      let data =  [
-        {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
-        {label: '用户管理', icon: 'el-icon-user', path: '/user', name: 'user'},
-        // {label: '菜单管理', icon: 'el-icon-menu', path: '/menu', name: 'menu'},
-      ]
+      let data = [
+          {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
+          {label: '系统管理', icon: 'el-icon-setting', path: '/sys', name: 'sys', children: [
+            {label: '用户管理', icon: 'el-icon-user', path: '/user', name: 'user'},
+          ]}
+        ]
       this.$store.dispatch('createMenu', data)
     },
     getActive(path) {
