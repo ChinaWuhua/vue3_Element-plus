@@ -11,10 +11,10 @@
       <div class="body">
         <router-view/>
       </div>
-      <div class="footer">
+      <!-- <div class="footer">
         <span>Author: wuhua</span>
         <span>QQ: 1007710266</span>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -94,11 +94,12 @@ export default defineComponent({
     background: #fff;
   }
   .layout > .content > .body {
-    min-height: calc(100% - 90px);
+    min-height: calc(100% - 60px);
     padding: 20px 20px;
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 0 8px #e9e9e9;
+    margin-bottom: 20px;
   }
   .footer {
     height: 50px;

@@ -4,7 +4,7 @@
     <el-dropdown>
       <span class="user-box">
         <i class="el-icon-user" style="margin-right: 8px;"></i>
-        {{userInfo?.user?.Username}}
+        {{userInfo?.user?.Name}}
       </span>
       <template #dropdown>
         <el-dropdown-menu>

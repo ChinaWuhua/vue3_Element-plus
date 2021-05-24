@@ -5,11 +5,11 @@
     <div style="max-width: 400px;">
       <el-form
         ref="form"
-        :model="form"
         :rules="rules"
+        :model="form"
         label-width="80px"
       >
-      <!-- :rules="rules" -->
+        <!-- :rules="rules" -->
         <el-form-item label="用户名" prop="Username">
           <el-input :disabled="mode !== 'add'" v-model="form.Username" maxlength="20" ></el-input>
         </el-form-item>
@@ -27,8 +27,8 @@
         </el-form-item>
         <el-form-item label="权限分配" prop="Role">
           <div class="treeContain">
-            <el-input v-model="roleList" readonly></el-input>
-            <el-button icon="el-icon-edit" style="margin-left: 10px;" @click="showTreepanel">选择</el-button>
+            <el-input :disabled="mode === 'view'" v-model="roleList" readonly></el-input>
+            <el-button :disabled="mode === 'view'" icon="el-icon-edit" style="margin-left: 10px;" @click="showTreepanel">选择</el-button>
           </div>
         </el-form-item>
         <el-form-item>
@@ -60,6 +60,7 @@
         show-checkbox
         node-key="name"
         :props="defaultProps"
+        :render-after-expand="false"
         @check-change="checkChange">
       </el-tree>
       <template #footer>
@@ -78,7 +79,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['menu']),
+    ...mapGetters(['menu', 'userInfo']),
     title() {
       let obj = {
         add: '新增用户',
@@ -202,7 +203,9 @@ export default {
         for (let item in this.form) {
           if (item === 'Role') {
             let list = this.pageData[item].map(menu => menu.name)
+            let str = this.pageData.Role.map(item => item.label)
             this.form[item] = list.join(',')
+            this.roleList = str.join(',')
           } else {
             this.form[item] = this.pageData[item] || ''
           }
@@ -218,7 +221,6 @@ export default {
         .updateUser(params)
         .then(res => {
           this.loading = false
-          this.tableData = res?.data?.users || []
           this.$message({
             message: res.msg,
             type: 'success'
@@ -248,7 +250,6 @@ export default {
             .userAdd(params)
             .then(res => {
               this.loading = false
-              this.tableData = res?.data?.users || []
               this.$message({
                 message: res.msg,
                 type: 'success'
