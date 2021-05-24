@@ -13,6 +13,12 @@
         <el-form-item label="用户名" prop="Username">
           <el-input :disabled="mode !== 'add'" v-model="form.Username" maxlength="20" ></el-input>
         </el-form-item>
+        <el-form-item label="账号状态">
+          <el-select :disabled="mode === 'view'" v-model="form.Status" style="width: 100%;">
+            <el-option :value="1" label="启用"></el-option>
+            <el-option :value="0" label="停用"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="真实姓名" prop="Name">
           <el-input :disabled="mode === 'view'" v-model="form.Name" maxlength="10"></el-input>
         </el-form-item>
@@ -41,6 +47,7 @@
             v-if="mode !== 'add'"
             type="primary"
             :disabled="loading"
+            @click="resetPSW"
           >重置密码</el-button>
           <el-button 
             :disabled="loading"
@@ -137,6 +144,7 @@ export default {
         Phone: "",
         Password: "",
         Role: '',
+        Status: 1,
       },
       roleList: '',
       mode: 'add',
@@ -187,7 +195,7 @@ export default {
         return
       }
       this.init = false
-      let arr = this.form.Role.split(',')
+      let arr = this.form.Role.map(item => item.name)
       let nodes = arr.map(item => ({
         name: item
       }))
@@ -202,15 +210,37 @@ export default {
       if (this.mode !== 'add') {
         for (let item in this.form) {
           if (item === 'Role') {
-            let list = this.pageData[item].map(menu => menu.name)
             let str = this.pageData.Role.map(item => item.label)
-            this.form[item] = list.join(',')
+            this.form[item] = this.pageData.Role
             this.roleList = str.join(',')
           } else {
             this.form[item] = this.pageData[item] || ''
           }
         }
       }
+    },
+    resetPSW() {
+      let params = {
+        ...this.form,
+        Password: '12345678'
+      }
+      this.loading = true
+      api
+        .updateUser(params)
+        .then(() => {
+          this.loading = false
+          this.$message({
+            message: '密码已重置为12345678',
+            type: 'success'
+          })
+        })
+        .catch(err => {
+          this.loading = false
+          this.$message({
+            message: err.msg,
+            type: "warning"
+          })
+        })
     },
     toUpdate() {
       let params = {

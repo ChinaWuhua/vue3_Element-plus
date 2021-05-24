@@ -14,6 +14,7 @@
       <el-table
         empty-text="暂无数据"
         :data="tableData"
+        height="400"
         border
         style="width: 100%; margin-top: 10px;">
         <el-table-column
@@ -30,10 +31,6 @@
           label="ID"
           min-width="200">
         </el-table-column>
-        <!-- <el-table-column
-          prop="Password"
-          label="密码">
-        </el-table-column> -->
         <el-table-column
           prop="Name"
           label="真实姓名">
@@ -60,18 +57,20 @@
         </el-table-column>
         <el-table-column
           prop="Role"
-          min-width="100"
+          width="200"
           label="权限">
           <template #default="scope">
             <template v-if="scope.row.Name === 'admin'">
               <el-tag type="success">超级管理员</el-tag>
             </template>
             <template v-else>
-              <el-tag 
-                v-for="item in scope.row.Role" 
-                :key="item.name">
-                {{item.label}}
-              </el-tag>
+              <div class="roleList">
+                <el-tag 
+                  v-for="item in scope.row.Role"
+                  :key="item.name">
+                  {{item.label}}
+                </el-tag>
+              </div>
             </template>
           </template>
         </el-table-column>
@@ -90,17 +89,17 @@
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
+                    <!-- <el-dropdown-item>
+                      <span @click="toDetail('view', scope.row)"><i class="el-icon-view"></i> 查看</span>
+                    </el-dropdown-item> -->
                     <el-dropdown-item>
-                      <el-button type="text" icon="el-icon-view" @click="toDetail('view', scope.row)">查看</el-button>
+                      <span @click="toDetail('edit', scope.row)"><i class="el-icon-edit"></i> 编辑</span>
                     </el-dropdown-item>
+                    <!-- <el-dropdown-item>
+                      <span><i class="el-icon-refresh"></i> 重置密码</span>
+                    </el-dropdown-item> -->
                     <el-dropdown-item>
-                      <el-button type="text" icon="el-icon-edit" @click="toDetail('edit', scope.row)">编辑</el-button>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <el-button type="text" icon="el-icon-refresh">重置密码</el-button>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                      <el-button v-if="Username != scope.row.Username" type="text" icon="el-icon-delete" @click="dropUser(scope.row)">删除</el-button>
+                      <span v-if="Username != scope.row.Username" @click="dropUser(scope.row)"><i class="el-icon-delete"></i>删除</span>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
@@ -110,7 +109,7 @@
         </el-table-column>
       </el-table>
       <!--翻页-->
-      <div class="pagination">
+      <!-- <div class="pagination">
         <el-pagination
           background
           layout="total, prev, pager, next"
@@ -120,7 +119,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange">
         </el-pagination>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -141,10 +140,15 @@ export default {
       statusListStyle: ['info', 'success'],
       // 查询表单
       searchItems: [
-        {name: 'Username', label: '用户名'}, 
-        {name: 'Name', label: '真实姓名'}, 
-        {name: 'Email', label: '邮箱'}, 
-        {name: 'Phone', label: '电话'},
+        // {name: 'Username', label: '用户名'}, 
+        // {name: 'Name', label: '真实姓名'}, 
+        // {name: 'Email', label: '邮箱'}, 
+        // {name: 'Phone', label: '电话'},
+        {name: 'counterStatus', label: '账号状态', type: 'select', dicData: [
+          {label: '全部', value: 2},
+          {label: '启用', value: 1},
+          {label: '停用', value: 0},
+        ]}
       ],
       searchFrom: {},
       total: 10,
@@ -159,7 +163,7 @@ export default {
     dropUser(row) {
       let that = this
       that
-        .$confirm('删除后不可恢复, 是否继续?', '提示', {
+        .$confirm(`将删除 ${row.Username} , 是否继续?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -233,5 +237,16 @@ export default {
   .pagination{
     margin-top: 12px;
     text-align: right;
+  }
+  .roleList {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .roleList .el-tag {
+    margin-left: 3px;
+  }
+  .roleList .el-tag:first-child{
+    margin-left: 0;
   }
 </style>
