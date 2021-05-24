@@ -6,18 +6,18 @@ export default createStore({
     ACTIVE_ROUTE: {},
   },
   mutations: {
-    SET_MENU(state: any, menu: any) {
+    SET_MENU(state, menu) {
       state.MENU_DATA = menu
     },
-    SET_ACTIVE_ROUTE(state: any, route: any) {
+    SET_ACTIVE_ROUTE(state, route) {
       state.ACTIVE_ROUTE = route
     }
   },
   actions: {
-    createMenu(context: any, value: any) {
+    createMenu(context, value) {
       context.commit('SET_MENU', value)
     },
-    createActiveRoute(context: any, value: any) {
+    createActiveRoute(context, value) {
       context.commit('SET_ACTIVE_ROUTE', value)
     },
   },

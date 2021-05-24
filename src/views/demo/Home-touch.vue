@@ -7,7 +7,7 @@
       @touchend="touchEnd">
       <div
         :style="{ 
-          transform: `scale(${scale}) translateX(${_x_}px) translateY(${_y_}px)`
+          transform: `scale(${scale}) translateX(${x_now}px) translateY(${y_now}px)`
         }"
         class="main"
       >
@@ -40,25 +40,21 @@
       </div>
     </div>
     <div class="debugging">
-      {{ _x_ }} | {{ _y_ }}
+      {{ x_now }} | {{ y_now }}
     </div>
     <div style="height: 1000px"></div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
 
 export default defineComponent({
   name: "HomeTouch",
-  components: {
-    HelloWorld,
-  },
   data() {
     return {
-      _x_: 0,
-      _y_: 0,
+      x_now: 0,
+      y_now: 0,
       lastSite: {
         x: 0,
         y: 0
@@ -70,25 +66,25 @@ export default defineComponent({
   },
   methods: {
     // 缩放
-    Zoom(e: any) {
+    Zoom() {
       this.testData = "zoom";
     },
     // 拖拽
-    Drag(e: any) {
+    Drag(e) {
       this.testData = "drag and move"
-      let to: any = e.touches[0]
-      let start: any = this.touch[0]
+      let to = e.touches[0]
+      let start = this.touch[0]
       let {x, y} = this.lastSite
-      this._x_ = to.pageX - start.pageX + x
-      this._y_ = to.pageY - start.pageY + y
+      this.x_now = to.pageX - start.pageX + x
+      this.y_now = to.pageY - start.pageY + y
     },
     touchEnd() {
       this.lastSite = {
-        x: this._x_,
-        y: this._y_
+        x: this.x_now,
+        y: this.y_now
       }
     },
-    touchMove(e: any) {
+    touchMove(e) {
       e.preventDefault();
       if (this.touch.length === 1) {
         this.Drag(e);
@@ -96,7 +92,7 @@ export default defineComponent({
         this.Zoom(e);
       }
     },
-    touchStart(e: any) {
+    touchStart(e) {
       this.touch = e?.touches;
     },
     toMax() {

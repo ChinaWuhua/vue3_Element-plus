@@ -12,62 +12,10 @@
         active-text-color="#ff9900"
         background-color="#545c64"
         :router="true">
-        <el-menu-item v-for="(item) for siderData" :key="item.path">
-          <i class="el-icon-house"></i>
-          厂房区域介绍
+        <el-menu-item v-for="item in arr" :key="item.path" :index="item.path">
+          <i :class="item.icon"></i>
+          {{item.label}}
         </el-menu-item>
-        <!-- <el-menu-item index="/charts">
-          <i class="el-icon-data-analysis"></i>
-          温度监控
-        </el-menu-item>
-        <el-menu-item index="/home-touch">
-          <i class="el-icon-phone"></i>
-          手机端
-        </el-menu-item> -->
-        <!-- <el-submenu index="1">
-          <template #title>
-            <i class="el-icon-location"></i>
-            <span>导航一</span>
-          </template>
-          <el-menu-item-group>
-            <template #title>分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template #title>选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-menu-item index="2">
-          <i class="el-icon-menu"></i>
-          <template #title>导航二</template>
-        </el-menu-item>
-        <el-menu-item index="3" disabled>
-          <i class="el-icon-document"></i>
-          <template #title>导航三</template>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting"></i>
-          <template #title>导航四</template>
-        </el-menu-item>
-        <el-submenu index="5">
-          <template #title>
-            <i class="el-icon-location"></i>
-            <span>导航一</span>
-          </template>
-          <el-menu-item-group>
-            <template #title>分组一</template>
-            <el-menu-item index="5-1">选项1</el-menu-item>
-            <el-menu-item index="5-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="5-3">选项3</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu> -->
       </el-menu>
     </div>
   </div>
@@ -76,7 +24,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { mapGetters } from 'vuex'
-let  tsArray: number[] = [1,1,2,3,4]
 export default defineComponent({
   name: 'side-item',
   computed: {
@@ -95,7 +42,13 @@ export default defineComponent({
   },
   data() {
     return {
-      activeRoute: ''
+      activeRoute: '',
+      arr: [
+        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+        {label: '文件预览', icon: 'el-icon-charts', path: '/preview'},
+      ]
     }
   },
   mounted() {
@@ -104,16 +57,16 @@ export default defineComponent({
   },
   methods: {
     setMenu() {
-      let data =  [
-        {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
-        {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
-        {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
-      ]
+      // let data =  [
+      //   {label: '厂房区域介绍', icon: 'el-icon-house', path: '/home'},
+      //   {label: '温度监控', icon: 'el-icon-data-analysis', path: '/charts'},
+      //   {label: '手机端', icon: 'el-icon-phone', path: '/home-touch'},
+      // ]
       // console.log(this)
-      this.$store.dispatch('createMenu', data)
+      // this.$store.dispatch('createMenu', data)
     },
-    getActive(path: String) {
-      let paths: any[]
+    getActive(path) {
+      let paths = [];
       paths = path.split('/')
       paths.splice(0,1)
       paths.splice(paths.length - 1,1)

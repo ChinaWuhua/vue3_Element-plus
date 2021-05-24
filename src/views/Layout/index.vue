@@ -122,16 +122,22 @@ export default defineComponent({
     border: 0;
     outline: none;
   }
-  ::-webkit-scrollbar {
-    width: 6px;
+  .sidebar-wrap::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 6px;
+      /*高宽分别对应横竖滚动条的尺寸*/
+      height: 6px;
   }
-  ::-webkit-scrollbar-track {
-    background-color: #ddd;
+  
+  .sidebar-wrap::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 10px;
+      background-color: #ccc;
   }
-  ::-webkit-scrollbar-thumb {
-    background-color: #999;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
+  
+  .sidebar-wrap::-webkit-scrollbar-track {
+      /*滚动条里面轨道*/
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: #333;
   }
 </style>
