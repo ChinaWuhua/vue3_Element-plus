@@ -14,13 +14,14 @@
       <el-table
         empty-text="暂无数据"
         :data="tableData"
-        height="400"
+        :height="400"
         border
         style="width: 100%; margin-top: 10px;">
         <el-table-column
           type="index"
           label="序号"
-          width="50">
+          width="50"
+          :index="indexMethod">
         </el-table-column>
         <el-table-column
           prop="Username"
@@ -136,6 +137,7 @@ export default {
     return {
       loading: false,
       tableData: [],
+      tableData_source: [],
       statusList: ['停用', '正常'],
       statusListStyle: ['info', 'success'],
       // 查询表单
@@ -144,15 +146,14 @@ export default {
         // {name: 'Name', label: '真实姓名'}, 
         // {name: 'Email', label: '邮箱'}, 
         // {name: 'Phone', label: '电话'},
-        {name: 'counterStatus', label: '账号状态', type: 'select', dicData: [
-          {label: '全部', value: 2},
+        {name: 'Status', label: '账号状态', type: 'select', dicData: [
           {label: '启用', value: 1},
           {label: '停用', value: 0},
         ]}
       ],
       searchFrom: {},
       total: 10,
-      pageSize: 10,
+      pageSize: 5,
       currentPage: 1
     };
   },
@@ -160,6 +161,9 @@ export default {
     this.onSearch()
   },
   methods: {
+    indexMethod(index) {
+      return 1 + index + (this.currentPage - 1) * this.pageSize
+    },
     dropUser(row) {
       let that = this
       that
@@ -207,8 +211,12 @@ export default {
       this.onSearch()
     },
     onSearch(form) {
-      this.searchFrom = form
+      form ? this.searchFrom = form : ''
       if (form) {this.currentPage = 1}
+      if (this.tableData_source.length > 0) {
+        this.localFilter()
+        return 
+      }
       this.loading = true
       api
         .getUsetlist({
@@ -218,8 +226,9 @@ export default {
         })
         .then(res => {
           this.loading = false
-          this.tableData = res?.data?.users || []
+          this.tableData_source = res?.data?.users || []
           this.total = res?.data?.users.length || 0
+          this.localFilter()
         })
         .catch(err => {
           this.loading = false
@@ -228,7 +237,33 @@ export default {
             type: "warning"
           })
         })
-    }
+    },
+    localFilter() {
+      let that = this
+      let keys = Object.keys(that.searchFrom)
+      let filter = false
+      keys.forEach(item => {
+        console.log(that.searchFrom[item].toString().replace(/(^\s*)|(\s*$)/g, ""))
+        if (that.searchFrom[item].toString().replace(/(^\s*)|(\s*$)/g, "") != "") {
+          filter = true
+        }
+      })
+      if (!filter) {
+        that.tableData = that.tableData_source
+        return
+      }
+      that.tableData = that.tableData_source.filter((item) => {
+        for (let key in that.searchFrom) {
+          let str = String(that.searchFrom[key])
+          let val = String(item[key])
+          if (
+            str === val ||
+            val.indexOf(str) >= 0
+          )
+          return item
+        }
+      })
+    },
   }
 };
 </script>

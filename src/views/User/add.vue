@@ -43,16 +43,16 @@
             @click="onSubmit"
             :disabled="loading"
           >保存</el-button>
+          <el-button 
+            :disabled="loading"
+            @click="() => {$router.go(-1)}"
+          >取消</el-button>
           <el-button
             v-if="mode !== 'add'"
             type="primary"
             :disabled="loading"
             @click="resetPSW"
           >重置密码</el-button>
-          <el-button 
-            :disabled="loading"
-            @click="() => {$router.go(-1)}"
-          >取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -195,7 +195,7 @@ export default {
         return
       }
       this.init = false
-      let arr = this.form.Role.map(item => item.name)
+      let arr = this.form.Role ? this.form.Role.map(item => item.name) : []
       let nodes = arr.map(item => ({
         name: item
       }))
@@ -220,27 +220,33 @@ export default {
       }
     },
     resetPSW() {
-      let params = {
-        ...this.form,
-        Password: '12345678'
-      }
-      this.loading = true
-      api
-        .updateUser(params)
-        .then(() => {
-          this.loading = false
-          this.$message({
-            message: '密码已重置为12345678',
-            type: 'success'
+      this.$confirm(`密码将重置为1234578 , 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          ...this.form,
+          Password: '12345678'
+        }
+        this.loading = true
+        api
+          .updateUser(params)
+          .then(() => {
+            this.loading = false
+            this.$message({
+              message: '密码已重置为12345678',
+              type: 'success'
+            })
           })
-        })
-        .catch(err => {
-          this.loading = false
-          this.$message({
-            message: err.msg,
-            type: "warning"
+          .catch(err => {
+            this.loading = false
+            this.$message({
+              message: err.msg,
+              type: "warning"
+            })
           })
-        })
+      })
     },
     toUpdate() {
       let params = {
