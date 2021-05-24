@@ -2,7 +2,7 @@ module.exports = {
   productionSourceMap: false,
   publicPath: './',
   devServer: {
-    port: 8080,
+    port: 1991,
     https: false,
     proxy: {//配置跨域
       '/api': {

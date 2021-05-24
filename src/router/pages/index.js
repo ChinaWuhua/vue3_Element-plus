@@ -19,5 +19,5 @@ export default [{
   path: '/user/add',
   name: 'user-add',
   component: () => import('@/views/User/add.vue'),
-  meta: { label: '用户详情' }
+  meta: { label: '用户详情', notAuth: true }
 }]

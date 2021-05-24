@@ -24,7 +24,9 @@
               {{item.label}}
             </el-menu-item>
           </template>
-          <sidebar-item v-else :key="item.path" :menu-data="item" />
+          <template v-else>
+            <sidebar-item v-if="isAdmin || permission.includes(item.path)" :key="item.path" :menu-data="item" />
+          </template>
         </template>
       </el-menu>
       
@@ -46,7 +48,7 @@ export default defineComponent({
       return role ? role.map(item => item.path) : []
     },
     isAdmin() {
-      return this.userInfo?.user?.Username === 'admin'
+      return this.userInfo?.user?.Username && this.userInfo.user.Username.indexOf('admin') >= 0
     }
   },
   watch: {
@@ -69,6 +71,7 @@ export default defineComponent({
           {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
           {label: '系统管理', icon: 'el-icon-setting', path: '/sys', name: 'sys', children: [
             {label: '用户管理', icon: 'el-icon-user', path: '/user', name: 'user'},
+            {label: '菜单', icon: 'el-icon-menu', path: '/menu', name: 'menu'},
           ]}
         ]
       this.$store.dispatch('createMenu', data)

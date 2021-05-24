@@ -28,11 +28,7 @@ import { mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'sidebar-item',
-  props: {
-    menuData: {
-      type: Object
-    }
-  },
+  props: ['menuData'],
   computed: {
     ...mapGetters(['menu', 'userInfo']),
     permission() {
@@ -40,7 +36,7 @@ export default defineComponent({
       return role ? role.map(item => item.path) : []
     },
     isAdmin() {
-      return this.userInfo.user.Username === 'admin'
+      return this.userInfo?.user?.Username && this.userInfo.user.Username.indexOf('admin') >= 0
     }
   }
 })

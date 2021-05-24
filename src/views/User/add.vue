@@ -9,6 +9,7 @@
         :rules="rules"
         label-width="80px"
       >
+      <!-- :rules="rules" -->
         <el-form-item label="用户名" prop="Username">
           <el-input :disabled="mode !== 'add'" v-model="form.Username" maxlength="20" ></el-input>
         </el-form-item>
@@ -16,9 +17,9 @@
           <el-input :disabled="mode === 'view'" v-model="form.Name" maxlength="10"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="Email">
-          <el-input :disabled="mode === 'view'" v-model="form.Email" maxlength="20"></el-input>
+          <el-input :disabled="mode === 'view'" v-model="form.Email" maxlength="50"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="Phone">
+        <el-form-item label="电话">
           <el-input :disabled="mode === 'view'" v-model="form.Phone" maxlength="11"></el-input>
         </el-form-item>
         <el-form-item v-if="mode === 'add'" label="密码" prop="Password">
@@ -26,17 +27,9 @@
         </el-form-item>
         <el-form-item label="权限分配" prop="Role">
           <div class="treeContain">
-            <el-input v-model="form.Role"></el-input>
-            <el-button type="primary" style="margin-left: 10px;">选择</el-button>
+            <el-input v-model="roleList" readonly></el-input>
+            <el-button icon="el-icon-edit" style="margin-left: 10px;" @click="showTreepanel">选择</el-button>
           </div>
-          
-          <!-- <el-select :disabled="mode === 'view'" v-model="form.Role" multiple style="width: 100%;">
-            <el-option 
-              v-for="item in menu" 
-              :key="item.key"
-              :label="item.label"
-              :value="item.name"></el-option>
-          </el-select> -->
         </el-form-item>
         <el-form-item>
           <el-button
@@ -56,6 +49,26 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog
+      title="权限列表"
+      v-model="dialogVisible"
+      width="500px"
+      @opened="showDefauleData">
+      <el-tree
+        ref="tree"
+        :data="menu"
+        show-checkbox
+        node-key="name"
+        :props="defaultProps"
+        @check-change="checkChange">
+      </el-tree>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,7 +126,7 @@ export default {
           { required: true, message: "请设置密码", trigger: "blur" },
         ],
         Role: [
-          { required: true, message: "请分配权限, 否则无法正常访问系统", trigger: "blur" },
+          { required: true, message: "请分配权限, 否则无法正常访问系统", trigger: "change" },
         ]
       },
       form: {
@@ -124,21 +137,72 @@ export default {
         Password: "",
         Role: '',
       },
+      roleList: '',
       mode: 'add',
       pageData: {},
+      dialogVisible: false,
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      treeSelected: [],
+      init: true,
     };
   },
   mounted() {
     this.pageInit()
   },
   methods: {
+    checkChange(node, chosed) {
+      let child = node.children || null
+      let axist = child ? this.treeSelected.find(item => child.find(obj => obj.name === item.name)) : null
+      if (chosed || axist) {
+        let repeat = this.treeSelected.find(item => item.name === node.name)
+        if (!repeat) {
+          this.treeSelected.push(node)
+        }
+      } else {
+        let index = this.getArrayIndex(this.treeSelected, node)
+        this.treeSelected.splice(index, 1)
+      }
+      let arr = this.treeSelected.map(item => item.label)
+      this.roleList = arr.join(',')
+      this.form.Role = this.treeSelected.map(item => ({
+        ...item,
+        children: []
+      }))
+    },
+    getArrayIndex(arr, obj) {
+      let i = arr.length;
+      while (i--) {
+          if (arr[i] === obj) {
+              return i;
+          }
+      }
+      return -1;
+    },
+    showDefauleData() {
+      if (!this.init) {
+        return
+      }
+      this.init = false
+      let arr = this.form.Role.split(',')
+      let nodes = arr.map(item => ({
+        name: item
+      }))
+      this.$refs.tree.setCheckedNodes(nodes)
+    },
+    showTreepanel() {
+      this.dialogVisible = true
+    },
     pageInit() {
       this.mode = this.$route.params?.mode || 'add'
       this.pageData = this.$route.params?.data ? JSON.parse(this.$route.params?.data) : {}
       if (this.mode !== 'add') {
         for (let item in this.form) {
           if (item === 'Role') {
-            this.form[item] = this.pageData[item].map(menu => menu.name)
+            let list = this.pageData[item].map(menu => menu.name)
+            this.form[item] = list.join(',')
           } else {
             this.form[item] = this.pageData[item] || ''
           }
@@ -148,9 +212,6 @@ export default {
     toUpdate() {
       let params = {
         ...this.form,
-        Role: this.menu.filter( item => 
-          this.form.Role.includes(item.name)
-        )
       }
       this.loading = true
       api
@@ -180,10 +241,7 @@ export default {
             return ;
           }
           let params = {
-            ...this.form,
-            Role: this.menu.filter( item => 
-              this.form.Role.includes(item.name)
-            )
+            ...this.form
           }
           this.loading = true
           api

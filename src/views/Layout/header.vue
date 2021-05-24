@@ -9,7 +9,7 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="logout"><i class="el-icon-switch-button"></i>退出登录</el-dropdown-item>
-          <el-dropdown-item v-if="userInfo?.user?.Username != 'admin'" @click="edit"><i class="el-icon-edit"></i>修改密码</el-dropdown-item>
+          <el-dropdown-item v-if="!isAdmin" @click="edit"><i class="el-icon-edit"></i>修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -36,6 +36,9 @@ import api from "@/api/user"
 export default defineComponent({
   computed: {
     ...mapGetters(['userInfo']),
+    isAdmin() {
+      return this.userInfo?.user?.Username && this.userInfo.user.Username.indexOf('admin') >= 0
+    }
   },
   data() {
     return {
