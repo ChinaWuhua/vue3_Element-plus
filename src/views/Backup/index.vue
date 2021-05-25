@@ -1,23 +1,48 @@
 <template>
   <div class="backup" v-loading="loading">
-    <div class="backupBox">
-      <el-button type="primary" icon="el-icon-office-building" @click="handelBackup">立即备份</el-button>
-      <el-button type="primary" icon="el-icon-refresh" @click="handelRecover">立即恢复</el-button>
-      <el-button icon="el-icon-refresh" @click="getBackupInfo" title="刷新"></el-button>
-    </div>
-    <div>
-      <div class="tip">
-        当前状态: 
-        <i :class="Status.icon"></i>
-        {{Status.label}}
-      </div>
-      <div class="tip">
-        最后一次备份时间: <i class="el-icon-date"></i> {{backupData.LastBackupTime || '获取备份时间异常'}}
-      </div>
-      <div class="tip">
-        最后一次恢复时间: <i class="el-icon-date"></i> {{backupData?.LastRecoverTime || '获取恢复时间异常'}}
-      </div>
-    </div>
+    <el-descriptions title="备份恢复记录" :column="1" border>
+      <template #extra>
+        <el-button type="primary" icon="el-icon-office-building" @click="handelBackup">立即备份</el-button>
+        <el-button icon="el-icon-refresh" @click="getBackupInfo" title="刷新"></el-button>
+      </template>
+      <el-descriptions-item>
+        <template #label>
+          当前状态
+        </template>
+        <el-tag :type="statuStyle[backupData?.Status - 1]">
+          <i :class="Status.icon"></i>
+          {{Status.label}}
+        </el-tag>
+      </el-descriptions-item>
+
+      <el-descriptions-item>
+        <template #label>
+          最后一次备份时间
+        </template>
+        <i class="el-icon-date"></i> 
+        {{backupData.LastBackupTime || '获取备份时间异常'}}
+      </el-descriptions-item>
+
+      <el-descriptions-item>
+        <template #label>
+          最后一次恢复时间
+        </template>
+        <i class="el-icon-date"></i> 
+        {{backupData?.LastRecoverTime || '获取恢复时间异常'}}
+      </el-descriptions-item>
+
+      <el-descriptions-item>
+        <template #label>
+          备份记录
+        </template>
+        <template v-if="backupData.Filenames">
+          <div class="backupFile" v-for="(item, index) in backupData.Filenames" :key="'file-' + index">
+            <div>{{item}}</div>
+            <el-button @click="handelRecover(item)">恢复备份</el-button>
+          </div>
+        </template>
+      </el-descriptions-item>
+    </el-descriptions>
   </div>
 </template>
 
@@ -27,7 +52,8 @@ export default {
   data() {
     return {
       loading: false,
-      backupData: {}
+      backupData: {status: 3},
+      statuStyle: ['success', 'warning', 'warning', 'info']
     };
   },
   computed: {
@@ -64,10 +90,12 @@ export default {
         return `${year}-${month}-${day} ${hour}:${minutes}:${second}`
       }
     },
-    handelRecover() {
+    handelRecover(Filename) {
       this.loading = true
       api
-        .handelRecover()
+        .handelRecover({
+          Filename
+        })
         .then(() => {
           this.loading = false
           this.getBackupInfo()
@@ -121,5 +149,22 @@ export default {
   }
   .tip:first-child {
     margin-top: 20px;
+  }
+  .backup {
+    max-width: 600px;
+  }
+  .backupFile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #666;
+    margin: 6px 0;
+  }
+  .backupFile:hover {
+    background: #ededed;
+  }
+  .backupFile > div {
+    margin-right: 12px;
   }
 </style>

@@ -15,10 +15,13 @@ export default {
     })
   },
   // 执行恢复
-  handelRecover() {
+  handelRecover(params = {}) {
     return ajax({
       method: 'post',
       url: '/api/backup/recover',
+      data: {
+        ...params
+      }
     })
   },
 }

@@ -20,8 +20,8 @@ export default function request(params) {
           reject(data)
         )
       })
-      .catch(err => {
-        reject(err)
+      .catch((err) => {
+        reject(err.response.data)
       })
   })
 }
