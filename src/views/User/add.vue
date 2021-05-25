@@ -97,14 +97,17 @@ export default {
     }
   },
   data() {
+    // 邮箱校验
     const validateEmail = (rule, value, callback) => {
-      let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      // let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      let reg = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/ 
       if (!reg.test(value)) {
         callback(new Error('邮箱格式不正确'));
       } else {
         callback();
       }
     };
+    // 电话校验
     const validatePhone = (rule, value, callback) => {
       let reg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
       if (!reg.test(value)) {
@@ -162,13 +165,14 @@ export default {
     this.pageInit()
   },
   methods: {
+    // 权限树勾选事件
     checkChange(node, chosed) {
       let child = node.children || null
       let axist = child ? this.treeSelected.find(item => child.find(obj => obj.name === item.name)) : null
       if (chosed || axist) {
         let repeat = this.treeSelected.find(item => item.name === node.name)
         if (!repeat) {
-          this.treeSelected.push(node)
+          this.treeSelected.push({...node, half: child ? true : false})
         }
       } else {
         let index = this.getArrayIndex(this.treeSelected, node)
@@ -181,6 +185,7 @@ export default {
         children: []
       }))
     },
+    // 获取下标
     getArrayIndex(arr, obj) {
       let i = arr.length;
       while (i--) {
@@ -190,20 +195,22 @@ export default {
       }
       return -1;
     },
+    // 载入已选
     showDefauleData() {
       if (!this.init) {
         return
       }
       this.init = false
-      let arr = this.form.Role ? this.form.Role.map(item => item.name) : []
+      let arr = this.form.Role ? this.form.Role.filter(item => !item.half) : []
       let nodes = arr.map(item => ({
-        name: item
+        name: item.name
       }))
       this.$refs.tree.setCheckedNodes(nodes)
     },
     showTreepanel() {
       this.dialogVisible = true
     },
+    // 初始化详情数据
     pageInit() {
       this.mode = this.$route.params?.mode || 'add'
       this.pageData = this.$route.params?.data ? JSON.parse(this.$route.params?.data) : {}
@@ -214,11 +221,12 @@ export default {
             this.form[item] = this.pageData.Role
             this.roleList = str.join(',')
           } else {
-            this.form[item] = this.pageData[item] || ''
+            this.form[item] = this.pageData[item]
           }
         }
       }
     },
+    // 重置密码
     resetPSW() {
       this.$confirm(`密码将重置为1234578 , 是否继续?`, '提示', {
         confirmButtonText: '确定',
@@ -248,6 +256,7 @@ export default {
           })
       })
     },
+    // 更新用户详情
     toUpdate() {
       let params = {
         ...this.form,
@@ -271,6 +280,7 @@ export default {
           })
         })
     },
+    // 新增用户
     onSubmit() {
       this.$refs.form.validate((pass) => {
         if (pass) {

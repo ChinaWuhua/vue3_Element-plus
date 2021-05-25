@@ -56,7 +56,7 @@
           label="电话"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="Role"
           width="200"
           label="权限">
@@ -74,7 +74,7 @@
               </div>
             </template>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           fixed="right"
           width="90"
@@ -142,16 +142,18 @@ export default {
       statusListStyle: ['info', 'success'],
       // 查询表单
       searchItems: [
-        // {name: 'Username', label: '用户名'}, 
+        {name: 'Username', label: '用户名'}, 
         // {name: 'Name', label: '真实姓名'}, 
-        // {name: 'Email', label: '邮箱'}, 
-        // {name: 'Phone', label: '电话'},
-        {name: 'Status', label: '账号状态', type: 'select', dicData: [
+        {name: 'Email', label: '邮箱'}, 
+        {name: 'Phone', label: '电话'},
+        {name: 'Status', label: '账号状态', type: 'select', defaultValue: 1, dicData: [
           {label: '启用', value: 1},
           {label: '停用', value: 0},
         ]}
       ],
-      searchFrom: {},
+      searchFrom: {
+        Status: 1
+      },
       total: 10,
       pageSize: 5,
       currentPage: 1
@@ -243,7 +245,6 @@ export default {
       let keys = Object.keys(that.searchFrom)
       let filter = false
       keys.forEach(item => {
-        console.log(that.searchFrom[item].toString().replace(/(^\s*)|(\s*$)/g, ""))
         if (that.searchFrom[item].toString().replace(/(^\s*)|(\s*$)/g, "") != "") {
           filter = true
         }
@@ -253,15 +254,17 @@ export default {
         return
       }
       that.tableData = that.tableData_source.filter((item) => {
+        let counut = 0
         for (let key in that.searchFrom) {
           let str = String(that.searchFrom[key])
           let val = String(item[key])
           if (
             str === val ||
             val.indexOf(str) >= 0
-          )
-          return item
+          ) counut += 1
         }
+
+        if (counut === keys.length) return item
       })
     },
   }

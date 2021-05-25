@@ -22,7 +22,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button :disabled="loading" @click="dialogVisible = false; newpsw = ''">取 消</el-button>
-          <el-button :disabled="loading" type="primary" @click="submit">确 定</el-button>
+          <el-button :disabled="loading || newpsw.length <= 0" type="primary" @click="submit">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -49,7 +49,14 @@ export default defineComponent({
   },
   methods: {
     submit() {
+      let userInfo = this.userInfo.user
       let params = {
+        Username: userInfo.Username || '',
+        Name: userInfo.Name || '',
+        Email: userInfo.Email || '',
+        Phone: userInfo.Phone || '',
+        Role: userInfo.Role || [],
+        Status: userInfo.Status || 0,
         Password: this.newpsw
       }
       this.loading = true
@@ -64,6 +71,7 @@ export default defineComponent({
           })
           this.dialogVisible = false
           this.newpsw = ''
+          this.logout()
         })
         .catch(err => {
           this.loading = false

@@ -1,7 +1,6 @@
 <template>
   <div class="home">
-    welcome, it's home page
-    <!-- <el-button @click="addRoute">添加路由</el-button> -->
+    <el-empty description="暂无待办事项"></el-empty>
   </div>
 </template>
 

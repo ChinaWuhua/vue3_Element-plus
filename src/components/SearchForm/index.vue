@@ -4,7 +4,7 @@
       <el-col
         v-for="item in searchItems" 
         :key="item.name"
-        :span="6"
+        :xs="24" :sm="12" :md="8" :lg="6" :xl="6"
         >
         <!-- :xs="24" :sm="12" :md="8" :lg="6" :xl="6" -->
         <div class="search-item">
@@ -37,7 +37,7 @@
           </span>
         </div>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <el-button 
           type="primary" 
           icon="el-icon-search" 
@@ -47,9 +47,9 @@
           icon="el-icon-refresh" 
           :disabled="disabled"
           @click="reset">重置</el-button>
-      </el-col>
+      </el-col> -->
     </el-row>
-    <!-- <div style="display: flex; justify-content: flex-end;">
+    <div style="display: flex; justify-content: flex-end;">
       <el-button 
         type="primary" 
         icon="el-icon-search" 
@@ -63,7 +63,7 @@
         icon="el-icon-sort" 
         :disabled="disabled"
         @click="toggle">{{show ? '隐藏' : '展开'}}</el-button>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -86,12 +86,12 @@ export default {
   data() {
     return {
       form: {},
-      show: true,
+      show: false,
     }
   },
   created() {
     this.searchItems.forEach(item => {
-      this.form[item.name] = ''
+      this.form[item.name] = item.defaultValue || ''
     })
   },
   methods: {
@@ -116,9 +116,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 12px;
 }
 .search-label {
   color: #666;
+  font-size: 14px;
 }
 .search-input {
   flex: 1;

@@ -33,12 +33,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   let login = user.isLogin();
   const permisson = store.state.userInfo?.user?.Role.map(item => item.path)
+  const isAdmin = store.state?.userInfo?.user?.Username.indexOf('admin') >= 0
   let child = permisson ? permisson.find(item => to.path.indexOf(item) >= 0 ) : undefined
-
+  
   if (to?.meta?.notAuth === true && to.name !== 'Layout') {
     next()
   } else if (!login) {
     next('/login')
+  } else if (isAdmin) {
+    next()
   } else if ( permisson && !permisson.includes(to.path) && !child) {
     ElMessage.warning('您暂无权限访问该页面，请联系管理员')
     if (from.name) {
