@@ -10,14 +10,16 @@
     <div class="map">
       <div :style="{'transform': `scale(${scale})`}">
         <svg height="600" width="600" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <polygon class="svgcontain shunde" style="fill: #5f9726;"  :points="chencun"></polygon>
-          <text x="130" dy="160" style="fill: white">陈村</text>
-          <polygon class="svgcontain beijiao" style="fill: #0190a6;" :points="beijiao"></polygon>
-          <text x="160" dy="270" style="fill: white">北滘</text>
-          <polygon class="svgcontain lundun" style="fill: #bc8534;" :points="lundun"></polygon>
-          <text x="200" dy="370" style="fill: white">伦敦</text>
-          <polygon class="svgcontain lundun" style="fill: #01a5ee;" :points="daliang"></polygon>
-          <text x="300" dy="500" style="fill: white">大良</text>
+          <polygon class="svgcontain" style="fill: #5f9726;"  :points="chencun"></polygon>
+          <text x="130" dy="80" style="fill: white">陈村</text>
+          <polygon class="svgcontain" style="fill: #0190a6;" :points="beijiao"></polygon>
+          <text x="160" dy="190" style="fill: white">北滘</text>
+          <polygon class="svgcontain" style="fill: #bc8534;" :points="lundun"></polygon>
+          <text x="200" dy="290" style="fill: white">伦敦</text>
+          <polygon class="svgcontain" style="fill: #01a5ee;" :points="daliang"></polygon>
+          <text x="300" dy="410" style="fill: white">大良</text>
+          <polygon class="svgcontain" style="fill: #bc8534;" :points="ronggui"></polygon>
+          <text x="300" dy="520" style="fill: white">容桂</text>
         </svg>
       </div>
     </div>
@@ -30,6 +32,7 @@ import chencun from './chencun'
 import beijiao from './beijiao'
 import lundun from './lundun'
 import daliang from './daliang'
+import ronggui from './ronggui'
 export default defineComponent({
   data() {
     return {
@@ -37,6 +40,7 @@ export default defineComponent({
       beijiao: '',
       lundun: '',
       daliang: '',
+      ronggui: '',
       scale: 1,
       pointsList: []
     }
@@ -76,30 +80,19 @@ export default defineComponent({
         this.scale -= 0.1
       }
     },
+    pointChange(tar, source) {
+      this[tar] = source.map(item => {
+        let x = item[0] - 500
+        let y = item[1] - 80
+        return `${x},${y} `
+      })
+    },
     toggle() {
-      this.chencun = chencun.map(item => {
-        let x = item[0] - 500
-        let y = item[1]
-        return `${x},${y} `
-      })
-      
-      this.beijiao = beijiao.map(item => {
-        let x = item[0] - 500
-        let y = item[1]
-        return `${x},${y} `
-      })
-
-      this.lundun = lundun.map(item => {
-        let x = item[0] - 500
-        let y = item[1]
-        return `${x},${y} `
-      })
-
-      this.daliang = daliang.map(item => {
-        let x = item[0] - 500
-        let y = item[1]
-        return `${x},${y} `
-      })
+      this.pointChange('chencun', chencun)
+      this.pointChange('beijiao', beijiao)
+      this.pointChange('lundun', lundun)
+      this.pointChange('daliang', daliang)
+      this.pointChange('ronggui', ronggui)
     }
   }
 })
