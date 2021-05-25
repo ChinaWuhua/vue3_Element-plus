@@ -7,9 +7,9 @@
     <el-button @click="clearPoints">清空标记点</el-button>
     <el-button @click="toggle">生成地图轮廓</el-button>
     <div>{{pointsList}}</div>
-    <div class="map">
+    <div class="map" @mousewheel="mousewheel">
       <div :style="{'transform': `scale(${scale})`}">
-        <svg height="800" width="800" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg height="700" width="710" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <polygon class="svgcontain" style="fill: #5f9726;"  :points="chencun"></polygon>
           <text x="330" dy="80" style="fill: white">陈村</text>
           <polygon class="svgcontain" style="fill: #0190a6;" :points="beijiao"></polygon>
@@ -135,16 +135,17 @@ export default defineComponent({
   stroke-width: 3; 
   cursor:pointer;
   stroke-linecap: round;
-  transition: .3s;
+  transition: .2s;
 }
 .svgcontain:hover {
   fill-opacity: 1;
+  box-shadow: 0 0 6px #ddd;
 }
 .map {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(13, 107, 119);
+  /* background: rgb(13, 107, 119); */
 }
 .mapImg{
   position: relative;
