@@ -1,25 +1,35 @@
 <template>
   <div>
-    <div class="mapImg" @mousedown="mousedown">
+    <!-- <div class="mapImg" @mousedown="mousedown">
       <img src="./map.png" alt="地图">
       <div class="cover"></div>
-    </div>
+    </div> -->
     <el-button @click="clearPoints">清空标记点</el-button>
-    <el-button @click="toggle">转化</el-button>
+    <el-button @click="toggle">生成地图轮廓</el-button>
     <div>{{pointsList}}</div>
     <div class="map">
       <div :style="{'transform': `scale(${scale})`}">
-        <svg height="600" width="600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg height="800" width="800" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <polygon class="svgcontain" style="fill: #5f9726;"  :points="chencun"></polygon>
-          <text x="130" dy="80" style="fill: white">陈村</text>
+          <text x="330" dy="80" style="fill: white">陈村</text>
           <polygon class="svgcontain" style="fill: #0190a6;" :points="beijiao"></polygon>
-          <text x="160" dy="190" style="fill: white">北滘</text>
+          <text x="360" dy="190" style="fill: white">北滘</text>
           <polygon class="svgcontain" style="fill: #bc8534;" :points="lundun"></polygon>
-          <text x="200" dy="290" style="fill: white">伦敦</text>
+          <text x="400" dy="290" style="fill: white">伦敦</text>
           <polygon class="svgcontain" style="fill: #01a5ee;" :points="daliang"></polygon>
-          <text x="300" dy="410" style="fill: white">大良</text>
-          <polygon class="svgcontain" style="fill: #bc8534;" :points="ronggui"></polygon>
-          <text x="300" dy="520" style="fill: white">容桂</text>
+          <text x="500" dy="410" style="fill: white">大良</text>
+          <polygon class="svgcontain" style="fill: #026177;" :points="ronggui"></polygon>
+          <text x="500" dy="520" style="fill: white">容桂</text>
+          <polygon class="svgcontain" style="fill: #059fe6;" :points="lecong"></polygon>
+          <text x="150" dy="150" style="fill: white">乐从</text>
+          <polygon class="svgcontain" style="fill: #03beed;" :points="leliu"></polygon>
+          <text x="250" dy="320" style="fill: white">勒流</text>
+          <polygon class="svgcontain" style="fill: #35762d;" :points="longjiang"></polygon>
+          <text x="90" dy="330" style="fill: white">龙江</text>
+          <polygon class="svgcontain" style="fill: #9f8730;" :points="xingtan"></polygon>
+          <text x="230" dy="480" style="fill: white">杏坛</text>
+          <polygon class="svgcontain" style="fill: #9d753a;" :points="junan"></polygon>
+          <text x="250" dy="620" style="fill: white">均安</text>
         </svg>
       </div>
     </div>
@@ -33,6 +43,11 @@ import beijiao from './beijiao'
 import lundun from './lundun'
 import daliang from './daliang'
 import ronggui from './ronggui'
+import lecong from './lecong'
+import leliu from './leliu'
+import longjiang from './longjiang'
+import xingtan from './xingtan'
+import junan from './junan'
 export default defineComponent({
   data() {
     return {
@@ -41,6 +56,11 @@ export default defineComponent({
       lundun: '',
       daliang: '',
       ronggui: '',
+      longjiang: '',
+      xingtan: '',
+      leliu: '',
+      lecong: '',
+      junan: '',
       scale: 1,
       pointsList: []
     }
@@ -82,7 +102,7 @@ export default defineComponent({
     },
     pointChange(tar, source) {
       this[tar] = source.map(item => {
-        let x = item[0] - 500
+        let x = item[0] - 300
         let y = item[1] - 80
         return `${x},${y} `
       })
@@ -93,6 +113,11 @@ export default defineComponent({
       this.pointChange('lundun', lundun)
       this.pointChange('daliang', daliang)
       this.pointChange('ronggui', ronggui)
+      this.pointChange('lecong', lecong)
+      this.pointChange('leliu', leliu)
+      this.pointChange('longjiang', longjiang)
+      this.pointChange('xingtan', xingtan)
+      this.pointChange('junan', junan)
     }
   }
 })
@@ -105,14 +130,15 @@ export default defineComponent({
   height: 400px;
 }
 .svgcontain {
+  fill-opacity: 0.5;
   stroke: #fff; 
   stroke-width: 3; 
   cursor:pointer;
   stroke-linecap: round;
-  opacity: .8;
+  transition: .3s;
 }
 .svgcontain:hover {
-  opacity: 1;
+  fill-opacity: 1;
 }
 .map {
   display: flex;
