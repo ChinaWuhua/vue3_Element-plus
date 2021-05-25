@@ -61,4 +61,14 @@ export default {
       }
     })
   },
+  // 用户修改密码
+  updatePassword(params = {}) {
+    return ajax({
+      method: 'post',
+      url: '/api/user/update/password',
+      data: {
+        ...params
+      }
+    })
+  },
 }

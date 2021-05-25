@@ -6,7 +6,6 @@
         :key="item.name"
         :xs="24" :sm="12" :md="8" :lg="6" :xl="6"
         >
-        <!-- :xs="24" :sm="12" :md="8" :lg="6" :xl="6" -->
         <div class="search-item">
           <span 
             class="search-label" 
@@ -37,17 +36,6 @@
           </span>
         </div>
       </el-col>
-      <!-- <el-col :span="6">
-        <el-button 
-          type="primary" 
-          icon="el-icon-search" 
-          :disabled="disabled"
-          @click="search">查询</el-button>
-        <el-button 
-          icon="el-icon-refresh" 
-          :disabled="disabled"
-          @click="reset">重置</el-button>
-      </el-col> -->
     </el-row>
     <div style="display: flex; justify-content: flex-end;">
       <el-button 
@@ -60,8 +48,7 @@
         :disabled="disabled"
         @click="reset">重置</el-button>
       <el-button 
-        icon="el-icon-sort" 
-        :disabled="disabled"
+        icon="el-icon-sort"
         @click="toggle">{{show ? '隐藏' : '展开'}}</el-button>
     </div>
   </div>

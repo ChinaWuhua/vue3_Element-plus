@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box" :class="{ 'login-box-loaded': loaded }">
-      <div class="login-logo">LOGO</div>
+      <div class="login-logo">电商管理系统</div>
       <div class="login-form">
         <el-form
           :model="ruleForm"
@@ -16,9 +16,8 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="ruleForm.password" size="small" placeholder="请输入密码" maxlength="20" show-password @keyup.enter="login" />
           </el-form-item>
-          <el-form-item>
-            <el-button :disabled="loading" size="small" type="primary" @click="login">登录</el-button>
-            <el-button :disabled="loading" size="small" @click="logout">清除登录状态</el-button>
+          <el-form-item style="text-align: right;">
+            <el-button :disabled="loading" type="primary" @click="login">登录 <i class="el-icon-right"></i></el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -82,23 +81,6 @@ export default {
             });
         }
       })
-    },
-    logout() {
-      sessionStorage.setItem('userInfo', null)
-      this.$store.dispatch('createUserInfo', null)
-      this.loading = true;
-      api
-        .Logout({ username: "admin" })
-        .then(() => {
-          this.loading = false;
-          this.$message.success('登录状态已清除')
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.$alert(err.msg, '提示', {
-            confirmButtonText: '知道了',
-          });
-        });
     }
   }
 };
@@ -115,7 +97,6 @@ export default {
   justify-content: center;
   align-items: center;
   background: url(./img/bg.jpg) no-repeat center center;
-  background-size: 100% auto;
   overflow: auto;
 }
 .login-box {

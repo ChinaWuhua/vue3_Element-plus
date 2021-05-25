@@ -9,7 +9,7 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item @click="logout"><i class="el-icon-switch-button"></i>退出登录</el-dropdown-item>
-          <el-dropdown-item v-if="!isAdmin" @click="edit"><i class="el-icon-edit"></i>修改密码</el-dropdown-item>
+          <el-dropdown-item @click="edit"><i class="el-icon-edit"></i>修改密码</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -17,12 +17,29 @@
     <el-dialog
       title="修改密码"
       v-model="dialogVisible"
-      width="500px">
-      <el-input :disabled="loading" placeholder="请输入新密码" v-model="newpsw"></el-input>
+      :width="panelWidth">
+      <div class="dialogItem">
+        <span class="dialogItemLabel">账号:</span>
+        <span class="dialogItemInput">
+          {{userInfo?.user?.Username}}
+        </span>
+      </div>
+      <div class="dialogItem">
+        <span class="dialogItemLabel">原密码:</span>
+        <span class="dialogItemInput">
+          <el-input :disabled="loading" v-model="OldPassword"></el-input>
+        </span>
+      </div>
+      <div class="dialogItem">
+        <span class="dialogItemLabel">新密码:</span>
+        <span class="dialogItemInput">
+          <el-input :disabled="loading" v-model="NewPassword"></el-input>
+        </span>
+      </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button :disabled="loading" @click="dialogVisible = false; newpsw = ''">取 消</el-button>
-          <el-button :disabled="loading || newpsw.length <= 0" type="primary" @click="submit">确 定</el-button>
+          <el-button :disabled="loading" @click="dialogVisible = false; NewPassword = ''">取 消</el-button>
+          <el-button :disabled="loading || NewPassword.length <= 0 || OldPassword.length <= 0" type="primary" @click="submit">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -36,32 +53,30 @@ import api from "@/api/user"
 export default defineComponent({
   computed: {
     ...mapGetters(['userInfo']),
-    isAdmin() {
-      return this.userInfo?.user?.Username && this.userInfo.user.Username.indexOf('admin') >= 0
+    panelWidth() {
+      let clientWidth = document.body.clientWidth;
+      return clientWidth > 800 ? '400px' : '80%'
     }
   },
   data() {
     return {
       dialogVisible: false,
-      newpsw: '',
+      NewPassword: '',
+      OldPassword: '',
       loading: false,
     }
   },
   methods: {
     submit() {
-      let userInfo = this.userInfo.user
+      let userInfo = this.userInfo?.user
       let params = {
-        Username: userInfo.Username || '',
-        Name: userInfo.Name || '',
-        Email: userInfo.Email || '',
-        Phone: userInfo.Phone || '',
-        Role: userInfo.Role || [],
-        Status: userInfo.Status || 0,
-        Password: this.newpsw
+        Username: userInfo?.Username,
+        OldPassword: this.OldPassword,
+        NewPassword: this.NewPassword
       }
       this.loading = true
       api
-        .updateUser(params)
+        .updatePassword(params)
         .then(res => {
           this.loading = false
           this.tableData = res?.data?.users || []
@@ -70,7 +85,7 @@ export default defineComponent({
             type: 'success'
           })
           this.dialogVisible = false
-          this.newpsw = ''
+          this.NewPassword = ''
           this.logout()
         })
         .catch(err => {
@@ -85,12 +100,13 @@ export default defineComponent({
       this.dialogVisible = true
     },
     logout() {
+      sessionStorage.setItem('userInfo', null)
+      this.$store.dispatch('createUserInfo', null)
+      this.$router.push('/login')
       api
         .Logout({ username: this.userInfo?.user?.Username })
         .then(() => {
-          sessionStorage.setItem('userInfo', null)
-          this.$store.dispatch('createUserInfo', null)
-          this.$router.push('/login')
+          
         })
         .catch((err) => {
           this.$alert(err.msg, '提示', {
@@ -114,5 +130,19 @@ export default defineComponent({
     display: flex;
     align-items: center;
     cursor: pointer;
+  }
+  .dialogItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+  .dialogItemLabel{ 
+    width: 80px;
+    font-size: 13px;
+  }
+  .dialogItemInput {
+    flex: 1;
+    margin-left: 12px;
   }
 </style>

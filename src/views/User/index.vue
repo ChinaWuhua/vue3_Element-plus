@@ -80,32 +80,27 @@
           width="90"
           label="操作">
           <template #default="scope">
-            <template v-if="scope.row.Name === 'admin'">
-              超级管理员
-            </template>
-            <template v-else>
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  <el-button type="text">操作选项<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <!-- <el-dropdown-item>
-                      <span @click="toDetail('view', scope.row)"><i class="el-icon-view"></i> 查看</span>
-                    </el-dropdown-item> -->
-                    <el-dropdown-item>
-                      <span @click="toDetail('edit', scope.row)"><i class="el-icon-edit"></i> 编辑</span>
-                    </el-dropdown-item>
-                    <!-- <el-dropdown-item>
-                      <span><i class="el-icon-refresh"></i> 重置密码</span>
-                    </el-dropdown-item> -->
-                    <el-dropdown-item>
-                      <span v-if="Username != scope.row.Username" @click="dropUser(scope.row)"><i class="el-icon-delete"></i>删除</span>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </template>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <el-button type="text">操作选项<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <!-- <el-dropdown-item>
+                    <span @click="toDetail('view', scope.row)"><i class="el-icon-view"></i> 查看</span>
+                  </el-dropdown-item> -->
+                  <el-dropdown-item>
+                    <span @click="toDetail('edit', scope.row)"><i class="el-icon-edit"></i> 编辑</span>
+                  </el-dropdown-item>
+                  <!-- <el-dropdown-item>
+                    <span><i class="el-icon-refresh"></i> 重置密码</span>
+                  </el-dropdown-item> -->
+                  <el-dropdown-item>
+                    <span v-if="Username != scope.row.Username && scope.row.Username !== 'admin'" @click="dropUser(scope.row)"><i class="el-icon-delete"></i>删除</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
         </el-table-column>
       </el-table>
@@ -138,21 +133,21 @@ export default {
       loading: false,
       tableData: [],
       tableData_source: [],
-      statusList: ['停用', '正常'],
-      statusListStyle: ['info', 'success'],
+      statusList: ['未知', '停用', '正常'],
+      statusListStyle: ['warning', 'info', 'success'],
       // 查询表单
       searchItems: [
         {name: 'Username', label: '用户名'}, 
         // {name: 'Name', label: '真实姓名'}, 
         {name: 'Email', label: '邮箱'}, 
         {name: 'Phone', label: '电话'},
-        {name: 'Status', label: '账号状态', type: 'select', defaultValue: 1, dicData: [
-          {label: '启用', value: 1},
-          {label: '停用', value: 0},
+        {name: 'Status', label: '账号状态', type: 'select', defaultValue: 2, dicData: [
+          {label: '启用', value: 2},
+          {label: '停用', value: 1},
         ]}
       ],
       searchFrom: {
-        Status: 1
+        Status: 2
       },
       total: 10,
       pageSize: 5,

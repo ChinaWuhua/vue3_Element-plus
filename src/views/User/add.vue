@@ -15,8 +15,8 @@
         </el-form-item>
         <el-form-item label="账号状态">
           <el-select :disabled="mode === 'view'" v-model="form.Status" style="width: 100%;">
-            <el-option :value="1" label="启用"></el-option>
-            <el-option :value="0" label="停用"></el-option>
+            <el-option :value="2" label="启用"></el-option>
+            <el-option :value="1" label="停用"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="真实姓名" prop="Name">
@@ -59,7 +59,7 @@
     <el-dialog
       title="权限列表"
       v-model="dialogVisible"
-      width="500px"
+      :width="panelWidth"
       @opened="showDefauleData">
       <el-tree
         ref="tree"
@@ -94,6 +94,10 @@ export default {
         view: '查看用户信息'
       }
       return obj[this.mode]
+    },
+    panelWidth() {
+      let clientWidth = document.body.clientWidth;
+      return clientWidth > 800 ? '500px' : '80%'
     }
   },
   data() {
@@ -228,7 +232,7 @@ export default {
     },
     // 重置密码
     resetPSW() {
-      this.$confirm(`密码将重置为1234578 , 是否继续?`, '提示', {
+      this.$confirm(`密码将重置为12345678 , 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

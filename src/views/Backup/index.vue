@@ -12,7 +12,7 @@
         {{Status.label}}
       </div>
       <div class="tip">
-        最后一次备份时间: <i class="el-icon-date"></i> {{backupData?.LastBackupTime || '获取备份时间异常'}}
+        最后一次备份时间: <i class="el-icon-date"></i> {{backupData.LastBackupTime || '获取备份时间异常'}}
       </div>
       <div class="tip">
         最后一次恢复时间: <i class="el-icon-date"></i> {{backupData?.LastRecoverTime || '获取恢复时间异常'}}
@@ -45,6 +45,25 @@ export default {
     this.getBackupInfo()
   },
   methods: {
+    UTC_TIME(value) {
+      if (!value) {
+        return ''
+      } else {
+        let date = new Date(value)
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let day = date.getDay()
+        let hour = date.getHours()
+        let minutes = date.getMinutes()
+        let second = date.getSeconds()
+        month < 10 ? month = `0${month}` : month
+        day < 10 ? day = `0${day}` : day
+        hour < 10 ? hour = `0${hour}` : hour
+        minutes < 10 ? minutes = `0${minutes}` : minutes
+        second < 10 ? second = `0${second}` : second
+        return `${year}-${month}-${day} ${hour}:${minutes}:${second}`
+      }
+    },
     handelRecover() {
       this.loading = true
       api
@@ -79,7 +98,11 @@ export default {
         .getBackupInfo()
         .then(res => {
           this.loading = false
-          this.backupData = res?.data || {}
+          this.backupData = {
+            ...res.data,
+            LastBackupTime: this.UTC_TIME(res.data.LastBackupTime),
+            LastRecoverTime: this.UTC_TIME(res.data.LastRecoverTime)
+          }
         })
         .catch(err => {
           this.loading = false
