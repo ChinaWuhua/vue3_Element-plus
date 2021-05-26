@@ -15,13 +15,13 @@
 
       <el-descriptions-item>
         <template #label>最后一次备份时间</template>
-        <div class="time"><i class="el-icon-date"></i> 北京时间: {{backupData._LastBackupTime_ || ''}}</div>
+        <div class="time"><i class="el-icon-date"></i> 当地时间: {{backupData._LastBackupTime_ || ''}}</div>
         <div class="time"><i class="el-icon-date"></i> UTC时间: {{backupData.LastBackupTime || ''}}</div>
       </el-descriptions-item>
 
       <el-descriptions-item>
         <template #label>最后一次恢复时间</template>
-        <div class="time"><i class="el-icon-date"></i> 北京时间: {{backupData?._LastRecoverTime_ || ''}}</div>
+        <div class="time"><i class="el-icon-date"></i> 当地时间: {{backupData?._LastRecoverTime_ || ''}}</div>
         <div class="time"><i class="el-icon-date"></i> UTC时间: {{backupData.LastRecoverTime || ''}}</div>
       </el-descriptions-item>
 
@@ -35,7 +35,7 @@
             </div>
             <div class="fileBtn">
               <el-button @click="handelRecover(item)">恢复</el-button>
-              <el-button type="danger">删除</el-button>
+              <el-button @click="handelDelete(item)" type="danger">删除</el-button>
             </div>
           </div>
         </template>
@@ -92,20 +92,52 @@ export default {
         return `${year}-${month}-${day} ${hour}:${minutes}:${second}`
       }
     },
-    handelRecover(Filename) {
-      this.loading = true
-      api
-        .handelRecover({
-          Filename
+    handelDelete(Filename) {
+      this
+        .$confirm(`将删除 ${Filename} , 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
         .then(() => {
-          this.loading = false
-          this.getBackupInfo()
-          this.$message.success('恢复成功, 正在刷新状态')
+          this.loading = true
+          api
+            .handelDelete({
+              Filename
+            })
+            .then(() => {
+              this.loading = false
+              this.getBackupInfo()
+              this.$message.success('删除成功, 正在刷新')
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err.msg)
+            })
         })
-        .catch(err => {
-          this.loading = false
-          this.$message.error(err.msg)
+    },
+    handelRecover(Filename) {
+      this
+        .$confirm(`将恢复备份文件: ${Filename} , 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          this.loading = true
+          api
+            .handelRecover({
+              Filename
+            })
+            .then(() => {
+              this.loading = false
+              this.getBackupInfo()
+              this.$message.success('恢复成功, 正在刷新状态')
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err.msg)
+            })
         })
     },
     handelBackup() {
@@ -186,12 +218,10 @@ export default {
     flex: 1;
   }
   .filename {
-    font-size: 14px;
     color: #666;
   }
   .filetime {
-    font-size: 13px;
-    color: #999;
+    color: #b2b2b2;
   }
   .fileBtn {
     flex-shrink: 1;

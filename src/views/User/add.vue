@@ -7,7 +7,7 @@
         ref="form"
         :rules="rules"
         :model="form"
-        label-width="80px"
+        label-width="100px"
       >
         <!-- :rules="rules" -->
         <el-form-item label="用户名" prop="Username">
@@ -21,6 +21,12 @@
         </el-form-item>
         <el-form-item label="真实姓名" prop="Name">
           <el-input :disabled="mode === 'view'" v-model="form.Name" maxlength="10"></el-input>
+        </el-form-item>
+        <el-form-item label="登录有效时间" prop="ExpireTime">
+          <div class="treeContain">
+            <el-input :disabled="mode === 'view'" v-model="form.ExpireTime" maxlength="10"></el-input>
+            <span class="text">分钟</span>
+          </div>
         </el-form-item>
         <el-form-item label="邮箱" prop="Email">
           <el-input :disabled="mode === 'view'" v-model="form.Email" maxlength="50"></el-input>
@@ -120,6 +126,17 @@ export default {
         callback();
       }
     };
+    // 数字校验
+    const validateNumber = (rule, value, callback) => {
+      let reg = /^[0-9]*$/;
+      if (!reg.test(value)) {
+        callback(new Error('请输入有效数字'));
+      } else if (value > 2000) {
+        callback(new Error('最大值为2000'));
+      } else {
+        callback();
+      }
+    }
     return {
       loading: false,
       rules: {
@@ -142,6 +159,9 @@ export default {
         ],
         Role: [
           { required: true, message: "请分配权限, 否则无法正常访问系统", trigger: "change" },
+        ],
+        ExpireTime: [
+          { validator: validateNumber, trigger: 'blur' }
         ]
       },
       form: {
@@ -152,6 +172,7 @@ export default {
         Password: "",
         Role: '',
         Status: 1,
+        ExpireTime: 0,
       },
       roleList: '',
       mode: 'add',
@@ -264,6 +285,7 @@ export default {
     toUpdate() {
       let params = {
         ...this.form,
+        ExpireTime: Number(this.form.ExpireTime || 0)
       }
       this.loading = true
       api
@@ -293,7 +315,8 @@ export default {
             return ;
           }
           let params = {
-            ...this.form
+            ...this.form,
+            ExpireTime: Number(this.form.ExpireTime || 0)
           }
           this.loading = true
           api
@@ -325,5 +348,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.treeContain .text {
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: 12px;
 }
 </style>

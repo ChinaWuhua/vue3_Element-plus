@@ -24,4 +24,14 @@ export default {
       }
     })
   },
+  // 删除备份
+  handelDelete(params = {}) {
+    return ajax({
+      method: 'post',
+      url: '/api/backup/delete',
+      data: {
+        ...params
+      }
+    })
+  },
 }

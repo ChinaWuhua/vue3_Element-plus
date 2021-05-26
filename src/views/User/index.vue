@@ -47,6 +47,13 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="ExpireTime"
+          label="登录有效时间">
+          <template #default="scope">
+            {{scope.row.ExpireTime}}分钟
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="Email"
           label="邮箱"
           min-width="150">
