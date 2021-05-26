@@ -15,6 +15,7 @@
     </el-dropdown>
     <!--修改密码弹窗-->
     <el-dialog
+      append-to-body
       title="修改密码"
       v-model="dialogVisible"
       :width="panelWidth">
