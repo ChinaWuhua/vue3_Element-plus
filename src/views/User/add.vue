@@ -170,15 +170,15 @@ export default {
   },
   methods: {
     // 权限树勾选事件
-    checkChange(node, chosed) {
-      let child = node.children || null
-      let axist = child ? this.treeSelected.find(item => child.find(obj => obj.name === item.name)) : null
-      if (chosed || axist) {
+    checkChange(node, chosed, childChosed) {
+      if (chosed || childChosed) {
+        // 若勾选状态为true，直接添加选中
         let repeat = this.treeSelected.find(item => item.name === node.name)
         if (!repeat) {
-          this.treeSelected.push({...node, half: child ? true : false})
+          this.treeSelected.push({...node, half: childChosed ? true : false})
         }
       } else {
+        // 若勾选状态为fale，直接从已选记录中删除
         let index = this.getArrayIndex(this.treeSelected, node)
         this.treeSelected.splice(index, 1)
       }
@@ -193,7 +193,7 @@ export default {
     getArrayIndex(arr, obj) {
       let i = arr.length;
       while (i--) {
-          if (arr[i] === obj) {
+          if (arr[i].name === obj.name) {
               return i;
           }
       }

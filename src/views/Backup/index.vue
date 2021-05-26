@@ -1,14 +1,12 @@
 <template>
   <div class="backup" v-loading="loading">
-    <el-descriptions title="备份恢复记录" :column="1" border>
+    <el-descriptions title="备份恢复记录" :column="1" border direction="horizontal">
       <template #extra>
         <el-button type="primary" icon="el-icon-office-building" @click="handelBackup">立即备份</el-button>
         <el-button icon="el-icon-refresh" @click="getBackupInfo" title="刷新"></el-button>
       </template>
       <el-descriptions-item>
-        <template #label>
-          当前状态
-        </template>
+        <template #label>当前状态</template>
         <el-tag :type="statuStyle[backupData?.Status - 1]">
           <i :class="Status.icon"></i>
           {{Status.label}}
@@ -16,29 +14,29 @@
       </el-descriptions-item>
 
       <el-descriptions-item>
-        <template #label>
-          最后一次备份时间
-        </template>
-        <i class="el-icon-date"></i> 
-        {{backupData.LastBackupTime || '获取备份时间异常'}}
+        <template #label>最后一次备份时间</template>
+        <div class="time"><i class="el-icon-date"></i> 北京时间: {{backupData._LastBackupTime_ || ''}}</div>
+        <div class="time"><i class="el-icon-date"></i> UTC时间: {{backupData.LastBackupTime || ''}}</div>
       </el-descriptions-item>
 
       <el-descriptions-item>
-        <template #label>
-          最后一次恢复时间
-        </template>
-        <i class="el-icon-date"></i> 
-        {{backupData?.LastRecoverTime || '获取恢复时间异常'}}
+        <template #label>最后一次恢复时间</template>
+        <div class="time"><i class="el-icon-date"></i> 北京时间: {{backupData?._LastRecoverTime_ || ''}}</div>
+        <div class="time"><i class="el-icon-date"></i> UTC时间: {{backupData.LastRecoverTime || ''}}</div>
       </el-descriptions-item>
 
       <el-descriptions-item>
-        <template #label>
-          备份记录
-        </template>
+        <template #label>备份记录</template>
         <template v-if="backupData.Filenames">
           <div class="backupFile" v-for="(item, index) in backupData.Filenames" :key="'file-' + index">
-            <div>{{item}}</div>
-            <el-button @click="handelRecover(item)">恢复备份</el-button>
+            <div class="filemsg">
+              <p class="filename">{{item}}</p>
+              <p class="filetime">{{backupData.FilenamesTime[index]}}</p>
+            </div>
+            <div class="fileBtn">
+              <el-button @click="handelRecover(item)">恢复</el-button>
+              <el-button type="danger">删除</el-button>
+            </div>
           </div>
         </template>
       </el-descriptions-item>
@@ -75,7 +73,11 @@ export default {
       if (!value) {
         return ''
       } else {
-        let date = new Date(value)
+        let str = value.replace(/backup_/, '')
+        str = str.replace(/\.zip/, '')
+        str = str.replace(/_/g, ':')
+        let date = new Date(str)
+        console.log(str, date)
         let year = date.getFullYear()
         let month = date.getMonth() + 1
         let day = date.getDate()
@@ -121,6 +123,7 @@ export default {
         })
     },
     getBackupInfo() {
+      let that = this
       this.loading = true
       api
         .getBackupInfo()
@@ -128,8 +131,11 @@ export default {
           this.loading = false
           this.backupData = {
             ...res.data,
-            LastBackupTime: this.UTC_TIME(res.data.LastBackupTime),
-            LastRecoverTime: this.UTC_TIME(res.data.LastRecoverTime)
+            LastBackupTime: res.data.LastBackupTime,
+            LastRecoverTime: res.data.LastRecoverTime,
+            _LastBackupTime_: this.UTC_TIME(res.data.LastBackupTime),
+            _LastRecoverTime_: this.UTC_TIME(res.data.LastRecoverTime),
+            FilenamesTime: res.data.Filenames.map(item => that.UTC_TIME(item))
           }
         })
         .catch(err => {
@@ -159,12 +165,44 @@ export default {
     align-items: center;
     font-size: 13px;
     color: #666;
-    margin: 6px 0;
+    padding: 6px 3px;
+    border-top: 1px dashed #ddd;
+
+  }
+  .backupFile:first-child {
+    border-top: 0;
   }
   .backupFile:hover {
     background: #ededed;
   }
   .backupFile > div {
     margin-right: 12px;
+  }
+  .time {
+    padding: 6px 0 0 0;
+  }
+  .filemsg {
+    margin-right: 12px;
+    flex: 1;
+  }
+  .filename {
+    font-size: 14px;
+    color: #666;
+  }
+  .filetime {
+    font-size: 13px;
+    color: #999;
+  }
+  .fileBtn {
+    flex-shrink: 1;
+    width: 122px;
+  }
+  @media screen and (max-width: 800px) {
+    .backupFile {
+      display: block;
+    }
+    .fileBtn {
+      margin-top: 12px;
+    }
   }
 </style>

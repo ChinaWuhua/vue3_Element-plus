@@ -36,10 +36,16 @@
           <el-input :disabled="loading" v-model="NewPassword"></el-input>
         </span>
       </div>
+      <div class="dialogItem">
+        <span class="dialogItemLabel">新密码确认:</span>
+        <span class="dialogItemInput">
+          <el-input :disabled="loading" v-model="NewPasswordAgain"></el-input>
+        </span>
+      </div>
       <template #footer>
         <span class="dialog-footer">
           <el-button :disabled="loading" @click="dialogVisible = false; NewPassword = ''">取 消</el-button>
-          <el-button :disabled="loading || NewPassword.length <= 0 || OldPassword.length <= 0" type="primary" @click="submit">确 定</el-button>
+          <el-button :disabled="loading || NewPassword.length <= 0 || OldPassword.length <= 0 || NewPasswordAgain.length <= 0" type="primary" @click="submit">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -63,11 +69,15 @@ export default defineComponent({
       dialogVisible: false,
       NewPassword: '',
       OldPassword: '',
+      NewPasswordAgain: '',
       loading: false,
     }
   },
   methods: {
     submit() {
+      if (this.NewPassword !== this.NewPasswordAgain) {
+        return this.$message.error('两次输入的新密码不一致')
+      }
       let userInfo = this.userInfo?.user
       let params = {
         Username: userInfo?.Username,

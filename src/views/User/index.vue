@@ -181,7 +181,7 @@ export default {
                 message: res.msg,
                 type: "success"
               })
-              that.onSearch()
+              that.onSearch(false, true)
             })
             .catch(err => {
               that.loading = false
@@ -207,10 +207,10 @@ export default {
       this.currentPage = val
       this.onSearch()
     },
-    onSearch(form) {
+    onSearch(form, renew) {
       form ? this.searchFrom = form : ''
       if (form) {this.currentPage = 1}
-      if (this.tableData_source.length > 0) {
+      if (this.tableData_source.length > 0 && !renew) {
         this.localFilter()
         return 
       }

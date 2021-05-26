@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       form: {},
-      show: false,
+      show: true,
     }
   },
   created() {
