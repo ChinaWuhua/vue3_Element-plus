@@ -131,8 +131,8 @@ export default {
       let reg = /^[0-9]*$/;
       if (!reg.test(value)) {
         callback(new Error('请输入有效数字'));
-      } else if (value > 2000) {
-        callback(new Error('最大值为2000'));
+      } else if (value > 2000 || value < 1) {
+        callback(new Error('请输入1~2000(含边界)的数值'));
       } else {
         callback();
       }
@@ -172,7 +172,7 @@ export default {
         Password: "",
         Role: '',
         Status: 1,
-        ExpireTime: 0,
+        ExpireTime: 1,
       },
       roleList: '',
       mode: 'add',
