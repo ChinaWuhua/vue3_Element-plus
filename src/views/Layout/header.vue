@@ -111,9 +111,6 @@ export default defineComponent({
       this.dialogVisible = true
     },
     logout() {
-      sessionStorage.setItem('userInfo', null)
-      this.$store.dispatch('createUserInfo', null)
-      this.$router.push('/login')
       api
         .Logout({ username: this.userInfo?.user?.Username })
         .then(() => {
@@ -124,6 +121,9 @@ export default defineComponent({
             confirmButtonText: '知道了',
           });
         });
+      sessionStorage.setItem('userInfo', null)
+      this.$store.dispatch('createUserInfo', null)
+      this.$router.push('/login')
     }
   }
 })
