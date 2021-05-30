@@ -19,10 +19,15 @@ export default [{
   path: '/user/add',
   name: 'user-add',
   component: () => import('@/views/User/add.vue'),
-  meta: { label: '用户详情', notAuth: true }
+  meta: { label: '用户详情', notAuth: true, parentPath: '/user', followParent: true }
 }, {
   path: '/backup',
   name: 'backup',
   component: () => import('@/views/Backup/index.vue'),
   meta: { label: '备份管理' }
+}, {
+  path: '/goodstype',
+  name: 'goodstype',
+  component: () => import('@/views/GoodsType/index.vue'),
+  meta: { label: '品类管理' }
 }]

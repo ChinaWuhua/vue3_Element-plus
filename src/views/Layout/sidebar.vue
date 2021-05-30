@@ -70,10 +70,14 @@ export default defineComponent({
       let data = [
           {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
           {label: '系统管理', icon: 'el-icon-setting', path: '/sys', name: 'sys', children: [
-            {label: '用户管理', icon: 'el-icon-user', path: '/user', name: 'user'},
-            {label: '备份管理', icon: 'el-icon-c-scale-to-original', path: '/backup', name: 'backup'},
-            // {label: '菜单', icon: 'el-icon-menu', path: '/menu', name: 'menu'},
-          ]}
+            {label: '用户管理', path: '/user', name: 'user'},
+            {label: '备份管理', path: '/backup', name: 'backup'},
+          ]},
+          {
+            label: '字典管理', icon: 'el-icon-notebook-1', path: '/dict', name: 'dict', children: [
+              {label: '商品类型', path: '/goodstype', name: 'goodstype'},
+            ]
+          }
         ]
       this.$store.dispatch('createMenu', data)
     },
