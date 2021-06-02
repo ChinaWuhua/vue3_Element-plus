@@ -30,4 +30,9 @@ export default [{
   name: 'goodstype',
   component: () => import('@/views/GoodsType/index.vue'),
   meta: { label: '品类管理' }
+}, {
+  path: '/units',
+  name: 'units',
+  component: () => import('@/views/Units/index.vue'),
+  meta: { label: '计量单位' }
 }]

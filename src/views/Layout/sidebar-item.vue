@@ -11,6 +11,7 @@
             v-if="isAdmin || permission.includes(item.path)"
             :key="item.path"
             :index="item.path"
+            style="margin-left: 12px;"
             >
             <i :class="item.icon"></i>
             {{item.label}}

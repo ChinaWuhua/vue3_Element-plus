@@ -2,15 +2,21 @@
   <div class="goodstype">
     <el-input
       placeholder="输入关键字进行过滤"
+      clearable
       v-model="filterText">
     </el-input>
 
     <div style="margin-top: 20px;">
+      <div style="margin-bottom: 10px;">
+        <el-button type="primary" icon="el-icon-plus" @click="append()">增加根类型</el-button>
+        <el-button icon="el-icon-check">保存变更</el-button>
+      </div>
       <el-tree
         :data="data"
         node-key="id"
         default-expand-all
         :expand-on-click-node="false"
+        :filter-node-method="filterNode"
         ref="tree">
         <template #default="{ node, data }">
           <div class="custom-tree-node">
@@ -31,6 +37,20 @@
         </template>
       </el-tree>
     </div>
+
+    <el-dialog
+      title="请输入品类名称"
+      v-model="dialogVisible"
+      width="300px"
+      @closed="clearText">
+      <el-input maxlength="10" v-model="handleText" />
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="confirm">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,6 +99,9 @@ export default {
     return {
       filterText: '',
       data: JSON.parse(JSON.stringify(data)),
+      dialogVisible: false,
+      handleText: '',
+      activeNode: null,
     };
   },
   watch: {
@@ -87,13 +110,32 @@ export default {
     }
   },
   methods: {
-    append(data) {
-      const newChild = { id: id++, label: 'testtest', children: [] };
-      if (!data.children) {
-        data.children = []
+    clearText() {
+      this.dialogVisible = false
+      this.handleText = ''
+      this.activeNode = null
+    },
+    append(data = null) {
+      this.dialogVisible = true
+      this.activeNode = data
+    },
+    confirm() {
+      if (!this.handleText) {
+        this.$message.warning('请输入品类名称')
+        return
       }
-      data.children.push(newChild);
+      let data = this.activeNode
+      const newChild = { id: id++, label: this.handleText, children: [] };
+      if (data) {
+        if (!data.children) {
+          data.children = []
+        }
+        data.children.push(newChild);
+      } else {
+        this.data.push(newChild)
+      }
       this.data = [...this.data]
+      this.dialogVisible = false
     },
     remove(node, data) {
       const parent = node.parent;

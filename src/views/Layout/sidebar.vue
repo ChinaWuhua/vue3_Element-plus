@@ -76,6 +76,7 @@ export default defineComponent({
           {
             label: '字典管理', icon: 'el-icon-notebook-1', path: '/dict', name: 'dict', children: [
               {label: '商品类型', path: '/goodstype', name: 'goodstype'},
+              {label: '计量单位', path: '/units', name: 'units'},
             ]
           }
         ]
