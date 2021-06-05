@@ -68,7 +68,7 @@ export default defineComponent({
   methods: {
     setMenu() {
       let data = [
-          {label: '首页', icon: 'el-icon-house', path: '/home', name: 'home'},
+          {label: '首页', icon: 'el-icon-s-home', path: '/home', name: 'home'},
           {label: '系统管理', icon: 'el-icon-setting', path: '/sys', name: 'sys', children: [
             {label: '用户管理', path: '/user', name: 'user'},
             {label: '备份管理', path: '/backup', name: 'backup'},
@@ -77,6 +77,19 @@ export default defineComponent({
             label: '字典管理', icon: 'el-icon-notebook-1', path: '/dict', name: 'dict', children: [
               {label: '商品类型', path: '/goodstype', name: 'goodstype'},
               {label: '计量单位', path: '/units', name: 'units'},
+              {label: '仓库管理', path: '/warehouse', name: 'warehouse'},
+            ]
+          },
+          {
+            label: '商品管理', icon: 'el-icon-takeaway-box', path: '/goodsmanager', name: 'goodsmanager', children: [
+              {label: '商品列表', path: '/goodslist', name: 'goodslist'},
+              {label: '套装商品', path: '/goodsSuit', name: 'goodsSuit'},
+            ]
+          },
+          {
+            label: '销售管理', icon: 'el-icon-s-order', path: '/sale', name: 'sale', children: [
+              {label: '销售单', path: '/saleList', name: 'saleList'},
+              {label: '退货单', path: '/saleReturn', name: 'saleReturn'},
             ]
           }
         ]

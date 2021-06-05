@@ -35,4 +35,29 @@ export default [{
   name: 'units',
   component: () => import('@/views/Units/index.vue'),
   meta: { label: '计量单位' }
+}, {
+  path: '/warehouse',
+  name: 'warehouse',
+  component: () => import('@/views/Warehouse/index.vue'),
+  meta: { label: '仓库管理' }
+}, {
+  path: '/goodslist',
+  name: 'goodslist',
+  component: () => import('@/views/Goodslist/index.vue'),
+  meta: { label: '商品列表' }
+}, {
+  path: '/goodsSuit',
+  name: 'goodsSuit',
+  component: () => import('@/views/GoodsSuit/index.vue'),
+  meta: { label: '套装商品' }
+}, {
+  path: '/saleList',
+  name: 'saleList',
+  component: () => import('@/views/Sale/index.vue'),
+  meta: { label: '销售单' }
+}, {
+  path: '/saleReturn',
+  name: 'saleReturn',
+  component: () => import('@/views/SaleReturn/index.vue'),
+  meta: { label: '退货单' }
 }]
