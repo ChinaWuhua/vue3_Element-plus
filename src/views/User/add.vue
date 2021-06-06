@@ -285,7 +285,8 @@ export default {
     toUpdate() {
       let params = {
         ...this.form,
-        ExpireTime: Number(this.form.ExpireTime || 0)
+        ExpireTime: Number(this.form.ExpireTime || 0),
+        Role: JSON.stringify(this.form.Role || '')
       }
       this.loading = true
       api
@@ -316,7 +317,8 @@ export default {
           }
           let params = {
             ...this.form,
-            ExpireTime: Number(this.form.ExpireTime || 0)
+            ExpireTime: Number(this.form.ExpireTime || 0),
+            Role: JSON.stringify(this.form.Role || '')
           }
           this.loading = true
           api
