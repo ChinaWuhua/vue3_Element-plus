@@ -200,6 +200,8 @@ export default {
         })
     },
     toDetail(mode, row) {
+      let Role = row?.Role ? JSON.parse(row.Role) : []
+      if (row.Role) row.Role = Role
       let data = JSON.stringify(row)
       this.$router.push({
         name: 'user-add',
