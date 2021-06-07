@@ -66,6 +66,8 @@ export default {
           api
             .Login({ username: this.ruleForm.username, password: this.ruleForm.password })
             .then((res) => {
+              let Role = JSON.parse(res?.data?.user?.Role)
+              res?.data?.user?.Role ? res.data.user.Role = Role : ''
               // 登录成功
               sessionStorage.setItem('userInfo', JSON.stringify(res.data))
               this.$store.dispatch('createUserInfo', res.data)
