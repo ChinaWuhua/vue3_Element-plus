@@ -260,7 +260,8 @@ export default {
       }).then(() => {
         let params = {
           ...this.form,
-          Password: '12345678'
+          Password: '12345678',
+          Role: JSON.stringify(this.form.Role || '')
         }
         this.loading = true
         api
