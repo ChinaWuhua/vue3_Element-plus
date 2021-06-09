@@ -1,5 +1,5 @@
 <template>
-  <div class="goodstype">
+  <div class="goodstype" v-loading="loading">
     <el-input
       placeholder="输入关键字进行过滤"
       clearable
@@ -8,11 +8,11 @@
 
     <div style="margin-top: 20px;">
       <div style="margin-bottom: 10px;">
-        <el-button type="primary" icon="el-icon-plus" @click="append()">增加根类型</el-button>
-        <el-button icon="el-icon-check">保存变更</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="append()">创建品类</el-button>
+        <!-- <el-button icon="el-icon-check">保存变更</el-button> -->
       </div>
       <el-tree
-        :data="data"
+        :data="treeData"
         node-key="id"
         default-expand-all
         :expand-on-click-node="false"
@@ -46,8 +46,8 @@
       <el-input maxlength="10" v-model="handleText" />
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="confirm">确 定</el-button>
+          <el-button :disabled="dialogLoading" @click="dialogVisible = false">取 消</el-button>
+          <el-button :disabled="dialogLoading" type="primary" @click="confirm">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -55,59 +55,28 @@
 </template>
 
 <script>
-// import api from "@/api/backup";
-
-let id = 1000;
+import api from "@/api/GoodsType";
 
 export default {
   data() {
-    let data = [{
-        id: 1,
-        label: '手机',
-        children: [{
-          id: 4,
-          label: 'iPhone',
-          children: [{
-            id: 9,
-            label: 'iPhone 12'
-          }, {
-            id: 10,
-            label: 'iPhone 12 Pro'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '电脑',
-        children: [{
-          id: 5,
-          label: '台式机'
-        }, {
-          id: 6,
-          label: '笔记本电脑'
-        }]
-      }, {
-        id: 3,
-        label: '电脑配件',
-        children: [{
-          id: 7,
-          label: '内存条'
-        }, {
-          id: 8,
-          label: '主板'
-        }]
-      }]
     return {
       filterText: '',
-      data: JSON.parse(JSON.stringify(data)),
+      // data: JSON.parse(JSON.stringify(data)),
+      treeData: [],
       dialogVisible: false,
       handleText: '',
       activeNode: null,
+      loading: false,
+      dialogLoading: false,
     };
   },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
     }
+  },
+  mounted() {
+    this.getTreeData()
   },
   methods: {
     clearText() {
@@ -125,17 +94,22 @@ export default {
         return
       }
       let data = this.activeNode
-      const newChild = { id: id++, label: this.handleText, children: [] };
-      if (data) {
-        if (!data.children) {
-          data.children = []
-        }
-        data.children.push(newChild);
-      } else {
-        this.data.push(newChild)
-      }
-      this.data = [...this.data]
-      this.dialogVisible = false
+      const newChild = { ParentId: data?.Uuid, Name: this.handleText };
+      this.dialogLoading = true
+      api
+        .add(newChild)
+        .then(res => {
+          if (res.status === 200) {
+            this.dialogLoading = false
+            this.$message.success(res.msg)
+            this.dialogVisible = false
+            this.getTreeData()
+          }
+        })
+        .catch(err => {
+          this.dialogLoading = false
+          this.$alert(err.msg)
+        })
     },
     remove(node, data) {
       const parent = node.parent;
@@ -147,6 +121,19 @@ export default {
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
+    },
+    getTreeData() {
+      this.loading = true
+      api
+        .getList()
+        .then(res => {
+          this.loading = false
+          console.log(res)
+        })
+        .catch(err => {
+          this.loading = false
+          console.log('-----fail----', err)
+        })
     }
   }
 };
@@ -155,7 +142,7 @@ export default {
 
 <style scoped>
 .goodstype {
-  max-width: 800px;
+  max-width: 600px;
 }
 .custom-tree-node {
   display: flex;
