@@ -175,7 +175,6 @@ export default {
             arr.forEach(item => {
               if (!item.ParentId) item.ParentId = 'root'
             })
-            console.log(res)
             this.cutList([{Name: '根节点', Uuid: 'root'}, ...arr])
           }
         })
