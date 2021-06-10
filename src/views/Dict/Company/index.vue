@@ -8,29 +8,29 @@
 
     <div style="margin-top: 20px;">
       <div style="margin-bottom: 10px;">
-        <el-button type="primary" icon="el-icon-plus" @click="append()">创建品类</el-button>
-        <!-- <el-button icon="el-icon-check">保存变更</el-button> -->
+        <el-button type="primary" icon="el-icon-plus" @click="append()">创建单位类型</el-button>
       </div>
       <el-tree
         :data="treeData"
-        node-key="id"
+        node-key="Uuid"
         default-expand-all
         :expand-on-click-node="false"
         :filter-node-method="filterNode"
         ref="tree">
-        <template #default="{ node, data }">
+        <template #default="{ data }">
           <div class="custom-tree-node">
-            <span>{{ node.label }}</span>
+            <span>{{ data.Name }}</span>
             <span>
               <el-button
                 type="text"
                 @click="append(data)">
-                <i class="el-icon-plus"></i> 添加子品类
+                <i class="el-icon-plus"></i> 添加
               </el-button>
               <el-button
+                :disabled="data.ParentId === 'root'"
                 type="text"
-                @click="remove(node, data)">
-                <i class="el-icon-delete"></i> 删除该品类
+                @click="remove(data)">
+                <i class="el-icon-delete"></i> 删除
               </el-button>
             </span>
           </div>
@@ -39,11 +39,11 @@
     </div>
 
     <el-dialog
-      title="请输入品类名称"
+      title="请输入公司名称"
       v-model="dialogVisible"
       width="300px"
       @closed="clearText">
-      <el-input maxlength="10" v-model="handleText" />
+      <el-input maxlength="20" v-model="handleText" />
       <template #footer>
         <span class="dialog-footer">
           <el-button :disabled="dialogLoading" @click="dialogVisible = false">取 消</el-button>
@@ -55,13 +55,12 @@
 </template>
 
 <script>
-import api from "@/api/GoodsType";
+import api from "@/api/Company";
 
 export default {
   data() {
     return {
       filterText: '',
-      // data: JSON.parse(JSON.stringify(data)),
       treeData: [],
       dialogVisible: false,
       handleText: '',
@@ -79,6 +78,32 @@ export default {
     this.getTreeData()
   },
   methods: {
+    async cutList(arr) {
+      let tree = arr.concat([])
+      tree.forEach((item) => {
+        item.children = [],
+        item.deep = 0
+      })
+      tree.forEach((item) => {
+        tree.forEach((item2) => {
+          if (item2.ParentId == item.Uuid) {
+            item.children.push(item2)
+          }
+        })
+      })
+      tree = tree[0]
+      tree = await this.judgeDept(tree, 0)
+      this.treeData = tree.children
+    },
+    judgeDept(arr, deep){
+      arr[0] ? arr.forEach((item) => {
+        item.deep = deep + 1
+        if (item.children[0]) {
+          this.judgeDept(item.children, item.deep)
+        }
+      }) : ''
+      return arr
+    },
     clearText() {
       this.dialogVisible = false
       this.handleText = ''
@@ -111,12 +136,29 @@ export default {
           this.$alert(err.msg)
         })
     },
-    remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
-      this.data = [...this.data]
+    remove(data) {
+      this
+        .$confirm(`将删除分类【${data.Name}】及其所属全部子分类并且不可恢复, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          this.loading = true
+          api
+            .delete({ Uuid: data.Uuid })
+            .then(res => {
+              this.loading = false
+              if (res.status === 200) {
+                this.$message.success(res.msg)
+                this.getTreeData()
+              }
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err.msg)
+            })
+        })
     },
     filterNode(value, data) {
       if (!value) return true;
@@ -128,13 +170,20 @@ export default {
         .getList()
         .then(res => {
           this.loading = false
-          console.log(res)
+          let arr = res?.data?.companies
+          if (arr && arr.length > 0) {
+            arr.forEach(item => {
+              if (!item.ParentId) item.ParentId = 'root'
+            })
+            console.log(res)
+            this.cutList([{Name: '根节点', Uuid: 'root'}, ...arr])
+          }
         })
         .catch(err => {
           this.loading = false
           console.log('-----fail----', err)
         })
-    }
+    },
   }
 };
 </script>

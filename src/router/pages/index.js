@@ -13,33 +13,38 @@ export default [{
 }, {
   path: '/user',
   name: 'user',
-  component: () => import('@/views/User/index.vue'),
+  component: () => import('@/views/Sys/User/index.vue'),
   meta: { label: '用户管理' }
 }, {
   path: '/user/add',
   name: 'user-add',
-  component: () => import('@/views/User/add.vue'),
+  component: () => import('@/views/Sys/User/add.vue'),
   meta: { label: '用户详情', notAuth: true, parentPath: '/user', followParent: true }
 }, {
   path: '/backup',
   name: 'backup',
-  component: () => import('@/views/Backup/index.vue'),
+  component: () => import('@/views/Sys/Backup/index.vue'),
   meta: { label: '备份管理' }
 }, {
   path: '/goodstype',
   name: 'goodstype',
-  component: () => import('@/views/GoodsType/index.vue'),
+  component: () => import('@/views/Dict/GoodsType/index.vue'),
   meta: { label: '品类管理' }
-}, {
-  path: '/units',
-  name: 'units',
-  component: () => import('@/views/Units/index.vue'),
-  meta: { label: '计量单位' }
 }, {
   path: '/warehouse',
   name: 'warehouse',
-  component: () => import('@/views/Warehouse/index.vue'),
+  component: () => import('@/views/Dict/Warehouse/index.vue'),
   meta: { label: '仓库管理' }
+}, {
+  path: '/account',
+  name: 'account',
+  component: () => import('@/views/Dict/Account/index.vue'),
+  meta: { label: '钱款账户类型' }
+}, {
+  path: '/company',
+  name: 'company',
+  component: () => import('@/views/Dict/Company/index.vue'),
+  meta: { label: '往来单位类型' }
 }, {
   path: '/goodslist',
   name: 'goodslist',

@@ -3,13 +3,13 @@ export default {
   getList() {
     return ajax({
       method: 'post',
-      url: '/api/product/type/all',
+      url: '/api/company/type/all',
     })
   },
   add(params = {}) {
     return ajax({
       method: 'post',
-      url: '/api/product/type/add',
+      url: '/api/company/type/add',
       data: {
         ...params,
       }
@@ -18,7 +18,7 @@ export default {
   delete(params = {}) {
     return ajax({
       method: 'post',
-      url: '/api/product/type/delete',
+      url: '/api/company/type/delete',
       data: {
         ...params,
       }
