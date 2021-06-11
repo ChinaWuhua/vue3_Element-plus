@@ -48,12 +48,17 @@ export default [{
 }, {
   path: '/goodslist',
   name: 'goodslist',
-  component: () => import('@/views/Goodslist/index.vue'),
+  component: () => import('@/views/GoodsManager/Goodslist/index.vue'),
   meta: { label: '商品列表' }
+}, {
+  path: '/goodslist/add',
+  name: 'goodslist-add',
+  component: () => import('@/views/GoodsManager/Goodslist/add.vue'),
+  meta: { label: '新增商品' }
 }, {
   path: '/goodsSuit',
   name: 'goodsSuit',
-  component: () => import('@/views/GoodsSuit/index.vue'),
+  component: () => import('@/views/GoodsManager/GoodsSuit/index.vue'),
   meta: { label: '套装商品' }
 }, {
   path: '/saleList',
