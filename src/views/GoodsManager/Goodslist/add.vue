@@ -2,7 +2,7 @@
   <div class="goodlist-add">
     <h3>新增商品</h3>
     <el-divider></el-divider>
-    <div style="max-width: 400px;">
+    <div style="max-width: 400px;" v-loading="loading">
       <el-form
         ref="form"
         :rules="rules"
@@ -11,27 +11,30 @@
       >
         <el-form-item label="商品分类" prop="ProductTypeId">
           <div class="treeChose">
-            <el-input v-model="form.ProductTypeId" readonly></el-input>
-            <tree-input />
+            <el-input v-model="form.ProductTypeName" readonly></el-input>
+            <tree-input @tree-chose="treeChose" />
           </div>
         </el-form-item>
         <el-form-item label="商品名称" prop="ProductName">
           <el-input v-model="form.ProductName" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="Price">
-          <el-input v-model="form.Price" maxlength="20" type="number"></el-input>
+        <el-form-item label="品牌名称" prop="BrandName">
+          <el-input v-model="form.BrandName" maxlength="20"></el-input>
         </el-form-item>
-        <el-form-item label="打折前价格" prop="PriceOrigin">
-          <el-input v-model="form.PriceOrigin" maxlength="20" type="number"></el-input>
+        <el-form-item label="价格1" prop="Price">
+          <el-input v-model="form.Price1" maxlength="20" type="number"></el-input>
+        </el-form-item>
+        <el-form-item label="价格2" prop="Price">
+          <el-input v-model="form.Price2" maxlength="20" type="number"></el-input>
+        </el-form-item>
+        <el-form-item label="价格3" prop="Price">
+          <el-input v-model="form.Price3" maxlength="20" type="number"></el-input>
         </el-form-item>
         <el-form-item label="规格书链接" prop="Specification">
           <el-input type="textarea" :rows="2" v-model="form.Specification"></el-input>
         </el-form-item>
         <el-form-item label="操作手册链接" prop="OperationManual">
           <el-input type="textarea" :rows="2" v-model="form.OperationManual"></el-input>
-        </el-form-item>
-        <el-form-item label="产品特色链接" prop="ProductFeature">
-          <el-input type="textarea" :rows="2" v-model="form.ProductFeature"></el-input>
         </el-form-item>
         <el-form-item label="产品特色链接" prop="ProductFeature">
           <el-input type="textarea" :rows="2" v-model="form.ProductFeature"></el-input>
@@ -66,7 +69,7 @@
 </template>
 
 <script>
-// import api from "@/api/Goodslist";
+import api from "@/api/Goodslist";
 import treeInput from '@/components/TreeInput/index'
 export default {
   components: {
@@ -85,23 +88,101 @@ export default {
       },
       form: {
         ProductName: '',
-        ProductTypeId: 'aaaa',
-        Price: '',
-        PriceOrigin: '',
+        ProductTypeName: '',
         BrandName: '',
+        ProductTypeId: '',
+        Price1: 0,
+        Price2: 0,
+        Price3: 0,
         Specification: '',
         OperationManual: '',
         ProductFeature: '',
-        Length: '',
-        Width: '',
-        Height: '',
-        Weight: '',
+        Length: 0,
+        Width: 0,
+        Height: 0,
+        Weight: 0,
       }
     };
   },
+  mounted() {
+    this.initForm()
+  },
   methods: {
+    initForm() {
+      let params = this.$route?.params
+      if (params.data) {
+        let data = JSON.parse(params.data)
+        for (let item in data) {
+          this.form[item] = data[item]
+        }
+      }
+    },
+    treeChose(data) {
+      this.form.ProductTypeName = data.Name
+      this.form.ProductTypeId = data.Uuid
+    },
     onSubmit() {
-
+      this.$refs.form.validate((pass) => {
+        if (pass) {
+          this.loading = true
+          let params = {
+            ProductName: this.form.ProductName,
+            ProductTypeId: this.form.ProductTypeId,
+            BrandName: this.form.BrandName,
+            Price1: this.form.Price1 * 1,
+            Price2: this.form.Price2 * 1,
+            Price3: this.form.Price3 * 1,
+            Specification: this.form.Specification,
+            OperationManual: this.form.OperationManual,
+            ProductFeature: this.form.ProductFeature,
+            Length: this.form.Length * 1,
+            Width: this.form.Width * 1,
+            Height: this.form.Height * 1,
+            Weight: this.form.Weight * 1,
+          }
+          if (this.form.Uuid) {
+            this.update({...params, Uuid: this.form.Uuid})
+          } else {
+            this.add(params)
+          }
+        }
+      })
+    },
+    add(params) {
+      api
+        .add(params)
+        .then(res => {
+          this.loading = false
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.$router.go(-1)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+        .catch(err => {
+          console.log('--fail--', err)
+          this.$message.error(err.msg)
+          this.loading = false
+        })
+    },
+    update(params) {
+      api
+        .update(params)
+        .then(res => {
+          this.loading = false
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.$router.go(-1)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+        .catch(err => {
+          console.log('--fail--', err)
+          this.$message.error(err.msg)
+          this.loading = false
+        })
     }
   }
 };

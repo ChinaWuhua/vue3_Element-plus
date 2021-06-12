@@ -12,7 +12,8 @@
         node-key="Uuid"
         :data="treeData"
         :expand-on-click-node="false"
-        :props="defaultProps">
+        :props="defaultProps"
+        @node-click="handleNodeClick">
       </el-tree>
       <template #footer>
         <span class="dialog-footer">
@@ -45,6 +46,10 @@ export default {
     }
   },
   methods: {
+    handleNodeClick(data) {
+      this.dialogVisible = false
+      this.$emit('treeChose', data)
+    },
     async cutList(arr) {
       let tree = arr.concat([])
       tree.forEach((item) => {

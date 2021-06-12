@@ -15,27 +15,62 @@
       </el-table-column>
       <el-table-column
         prop="ProductName"
-        label="商品名称">
+        label="商品名称"
+        width="120">
       </el-table-column>
       <el-table-column
         prop="Uuid"
-        label="Uuid">
+        label="Uuid"
+        width="200">
       </el-table-column>
       <el-table-column
-        prop="Price"
-        label="价格">
+        prop="Price1"
+        label="价格1"
+        width="120">
       </el-table-column>
       <el-table-column
-        prop="PriceOrigin"
-        label="打折前价格">
+        prop="Price2"
+        label="价格2"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="Price3"
+        label="价格3"
+        width="120">
       </el-table-column>
       <el-table-column
         prop="BrandName"
-        label="品牌">
+        label="品牌"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="OperationManual"
+        label="操作手册链接"
+        width="120">
+        <template #default="scope">
+          <a v-if="scope.row.OperationManual" :href="scope.row.OperationManual" target="_blank">点击打开</a>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="ProductFeature"
+        label="产品特色链接"
+        width="120">
+        <template #default="scope">
+          <a v-if="scope.row.ProductFeature" :href="scope.row.ProductFeature" target="_blank">点击打开</a>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="Specification"
+        label="规格书链接"
+        width="120">
+        <template #default="scope">
+          <a v-if="scope.row.Specification" :href="scope.row.Specification" target="_blank">点击打开</a>
+        </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="150">
+        width="150"
+        fixed="right">
         <template #default="scope">
           <el-button type="primary" @click="edit(scope)">修改</el-button>
           <el-button type="danger" @click="remove(scope)">删除</el-button>
@@ -82,10 +117,39 @@ export default {
       this.$router.push('/goodslist/add')
     },
     edit(scope) {
-      console.log(scope)
+      this.$router.push({
+        name: 'goodslist-add',
+        params: {
+          mode: 'edit',
+          data: JSON.stringify(scope.row)
+        }
+      })
     },
     remove(scope) {
-      console.log(scope)
+      this
+        .$confirm(`将删除【${scope.row.ProductName}】并且不可恢复, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          this.loading = true
+          api
+            .delete({Uuid: scope.row.Uuid})
+            .then(res => {
+              this.loading = false
+              if (res.status === 200) {
+                this.$message.success(res.msg)
+                this.getList()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err.msg)
+            })
+        })
     }
   }
 };
