@@ -1,6 +1,6 @@
 <template>
   <div class="tree-input">
-    <el-button type="primary" style="margin-left: 12px;" @click="dialogVisible = true">选择品类</el-button>
+    <el-button type="primary" style="margin-left: 6px;" @click="dialogVisible = true">{{ text || '选择品类'}}</el-button>
     <el-dialog
       title="品类选择"
       v-model="dialogVisible"
@@ -28,6 +28,7 @@
 <script>
 import api from "@/api/GoodsType";
 export default {
+  props: ['text'],
   computed: {
     panelWidth() {
       let clientWidth = document.body.clientWidth;

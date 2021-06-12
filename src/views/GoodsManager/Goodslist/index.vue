@@ -1,7 +1,12 @@
 <template>
   <div class="goodlist">
-    <div style="margin-bottom: 12px;">
+    <div class="tools">
       <el-button type="primary" icon="el-icon-plus" @click="add">新增商品</el-button>
+      <div class="treeChose">
+        <el-input v-model="ProductTypeName" readonly></el-input>
+        <tree-input @tree-chose="treeChose" text="按品类查找" />
+        <el-button @click="clear" style="margin-left: 6px;">清空</el-button>
+      </div>
     </div>
     <el-table
       v-loading="loading"
@@ -16,6 +21,11 @@
       <el-table-column
         prop="ProductName"
         label="商品名称"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="ProductTypeName"
+        label="品类"
         width="120">
       </el-table-column>
       <el-table-column
@@ -82,8 +92,10 @@
 
 <script>
 import api from "@/api/Goodslist";
+import treeInput from '@/components/TreeInput/index'
 
 export default {
+  components: { treeInput },
   data() {
     return {
       tableData: [],
@@ -91,12 +103,23 @@ export default {
       CurrentPage: 1,
       PageSize: 10,
       ProductTypeId: '',
+      ProductTypeName: '',
     };
   },
   mounted() {
     this.getList()
   },
   methods: {
+    clear() {
+      this.ProductTypeName = ''
+      this.ProductTypeId = ''
+      this.getList()
+    },
+    treeChose(data) {
+      this.ProductTypeName = data.Name
+      this.ProductTypeId = data.Uuid
+      this.getList()
+    },
     getList() {
       let { CurrentPage, PageSize, ProductTypeId } = this
       this.loading = true
@@ -157,5 +180,15 @@ export default {
 
 
 <style scoped>
-
+  .tools {
+    display: flex;
+    align-items: center;
+    margin: 0 0 12px 0;
+  }
+  .treeChose {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 12px;
+  }
 </style>
