@@ -1,10 +1,11 @@
 <template>
-  <div class="units">
+  <div class="GoodsSuit">
     <div style="margin-bottom: 12px;">
       <el-button type="primary" icon="el-icon-plus">新增套装</el-button>
     </div>
     <el-table
       border
+      v-loading="loading"
       :data="tableData"
       style="width: 100%;">
       <el-table-column
@@ -13,30 +14,20 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="text"
+        prop="ProductTogetherName"
         label="套装名称">
       </el-table-column>
       <el-table-column
-        prop="price"
-        label="售价">
+        prop="Products"
+        label="套装内商品">
       </el-table-column>
       <el-table-column
-        prop="type"
-        label="类型">
+        prop="ProductName"
+        label="套装商品名称">
       </el-table-column>
       <el-table-column
-        prop="handler"
-        label="销售人">
-      </el-table-column>
-      <el-table-column
-        prop="includes"
-        label="包含商品详情"
-        width="300">
-        <template #default="scope">
-          <div style="margin-left: -8px;">
-            <el-tag style="margin-left: 8px;" v-for="(item, index) in scope.row.includes" :key="'suit-' + index">{{item}}</el-tag>
-          </div>
-        </template>
+        prop="Quantity"
+        label="商品数量">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -51,19 +42,19 @@
 </template>
 
 <script>
-// import api from "@/api/backup";
+import api from "@/api/GoodsSuit";
 
 export default {
   data() {
     return {
-      tableData: [
-        {text: 'iPhone 12促销618', includes: ['iPhone 12 128G', 'anker 20W充电头', 'anker 1.5m 快充线'], price: 13245, type: '普通', level: '普通', handler: '张三', addr: '广州市天河区珠江新城华利路15号', id: 'measure-001', value: 'measurement-001'},
-        {text: '华为Mate 40 Pro', price: 13245, type: '普通', level: '普通', handler: '张三', addr: '广州市天河区珠江新城华利路15号', id: 'measure-002', value: 'measurement-002'},
-        {text: '惠普笔记本电脑', price: 13245, type: '普通', level: '普通', handler: '张三', addr: '广州市天河区珠江新城华利路15号', id: 'measure-003', value: 'measurement-003'},
-        {text: 'MacBook Air 512G', price: 13245, type: '普通', level: '普通', handler: '张三', addr: '广州市天河区珠江新城华利路15号', id: 'measure-004', value: 'measurement-004'},
-        {text: '海尔空调', price: 13245, type: '普通', level: '普通', handler: '张三', addr: '广州市天河区珠江新城华利路15号', id: 'measure-005', value: 'measurement-005'},
-      ]
+      loading: false,
+      CurrentPage: 1,
+      PageSize: 10,
+      tableData: []
     };
+  },
+  mounted() {
+    this.getList()
   },
   methods: {
     edit(scope) {
@@ -71,7 +62,23 @@ export default {
     },
     remove(scope) {
       console.log(scope)
-    }
+    },
+    getList() {
+      let { CurrentPage, PageSize } = this
+      this.loading = true
+      api
+        .getList({
+          CurrentPage, PageSize
+        })
+        .then(res => {
+          this.loading = false
+          this.tableData = res?.data?.product_togethers || []
+        })
+        .catch(err => {
+          this.loading = false
+          console.log('-----fail----', err)
+        })
+    },
   }
 };
 </script>

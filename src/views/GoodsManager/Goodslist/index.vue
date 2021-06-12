@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column
         prop="Uuid"
-        label="Uuid"
+        label="uuid"
         width="200">
       </el-table-column>
       <el-table-column

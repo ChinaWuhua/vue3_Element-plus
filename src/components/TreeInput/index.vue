@@ -6,6 +6,12 @@
       v-model="dialogVisible"
       :width="panelWidth"
       @opened="getTreeData">
+      <el-input
+        style="margin-bottom: 12px;"
+        clearable
+        placeholder="输入关键字进行过滤"
+        v-model="filterText">
+      </el-input>
       <el-tree
         v-loading="loading"
         ref="tree"
@@ -13,6 +19,7 @@
         :data="treeData"
         :expand-on-click-node="false"
         :props="defaultProps"
+        :filter-node-method="filterNode"
         @node-click="handleNodeClick">
       </el-tree>
       <template #footer>
@@ -35,8 +42,14 @@ export default {
       return clientWidth > 800 ? '500px' : '80%'
     }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   data() {
     return {
+      filterText: '',
       treeData: [],
       defaultProps: {
         children: 'children',
@@ -47,6 +60,10 @@ export default {
     }
   },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.Name.indexOf(value) !== -1;
+    },
     handleNodeClick(data) {
       this.dialogVisible = false
       this.$emit('treeChose', data)

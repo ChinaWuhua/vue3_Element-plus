@@ -1,6 +1,6 @@
 <template>
   <div class="goodlist-add">
-    <h3>新增商品</h3>
+    <h3>{{ $route?.params?.data ? '修改商品' : '新增商品' }}</h3>
     <el-divider></el-divider>
     <div style="max-width: 400px;" v-loading="loading">
       <el-form
