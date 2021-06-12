@@ -16,7 +16,7 @@
           </div>
         </el-form-item>
         <el-form-item label="商品名称" prop="ProductName">
-          <el-input v-model="form.ProductName" maxlength="20"></el-input>
+          <el-input v-model="form.ProductName" maxlength="50"></el-input>
         </el-form-item>
         <el-form-item label="品牌名称" prop="BrandName">
           <el-input v-model="form.BrandName" maxlength="20"></el-input>

@@ -1,7 +1,7 @@
 <template>
   <div class="GoodsSuit">
     <div style="margin-bottom: 12px;">
-      <el-button type="primary" icon="el-icon-plus">新增套装</el-button>
+      <el-button type="primary" icon="el-icon-plus" @click="add">新增套装</el-button>
     </div>
     <el-table
       border
@@ -15,19 +15,36 @@
       </el-table-column>
       <el-table-column
         prop="ProductTogetherName"
-        label="套装名称">
+        label="套装名称"
+        width="150">
       </el-table-column>
       <el-table-column
         prop="Products"
-        label="套装内商品">
+        label="套装内商品"
+        width="300">
+        <template #default="scope">
+          <div style="margin: -6px 0 0 -6px;">
+            <el-tag 
+              style="margin: 6px 0 0 6px;"
+              type="primary" 
+              v-for="(item, index) in scope.row.Products"
+              :key="'goods-' + index">
+              {{item.ProductName}} * {{item.Quantity}}
+            </el-tag>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="ProductName"
-        label="套装商品名称">
+        prop="Price1"
+        label="价格1">
       </el-table-column>
       <el-table-column
-        prop="Quantity"
-        label="商品数量">
+        prop="Price2"
+        label="价格2">
+      </el-table-column>
+      <el-table-column
+        prop="Price3"
+        label="价格3">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -57,11 +74,43 @@ export default {
     this.getList()
   },
   methods: {
+    add() {
+      this.$router.push('/goodsSuit/add')
+    },
     edit(scope) {
-      console.log(scope)
+      this.$router.push({
+        name: 'goodsSuit-add',
+        params: {
+          mode: 'edit',
+          data: JSON.stringify(scope.row)
+        }
+      })
     },
     remove(scope) {
-      console.log(scope)
+      this
+        .$confirm(`将删除【${scope.row.ProductTogetherName}】并且不可恢复, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+        .then(() => {
+          this.loading = true
+          api
+            .delete({Uuid: scope.row.Uuid})
+            .then(res => {
+              this.loading = false
+              if (res.status === 200) {
+                this.$message.success(res.msg)
+                this.getList()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err.msg)
+            })
+        })
     },
     getList() {
       let { CurrentPage, PageSize } = this

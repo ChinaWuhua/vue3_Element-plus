@@ -5,7 +5,7 @@
       title="品类选择"
       v-model="dialogVisible"
       :width="panelWidth"
-      @opened="getTreeData">
+      @opened="loadTreeData">
       <el-input
         style="margin-bottom: 12px;"
         clearable
@@ -24,8 +24,9 @@
       </el-tree>
       <template #footer>
         <span class="dialog-footer">
+          <el-button :disabled="loading" type="primary" icon="el-icon-refresh" @click="getTreeData">刷新数据</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
         </span>
       </template>
     </el-dialog>
@@ -60,6 +61,11 @@ export default {
     }
   },
   methods: {
+    loadTreeData() {
+      if (this.treeData.length <= 0) {
+        this.getTreeData()
+      }
+    },
     filterNode(value, data) {
       if (!value) return true;
       return data.Name.indexOf(value) !== -1;

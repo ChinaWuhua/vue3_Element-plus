@@ -18,6 +18,15 @@ export default {
       }
     })
   },
+  update(params = {}) {
+    return ajax({
+      method: 'post',
+      url: '/api/product/together/update',
+      data: {
+        ...params,
+      }
+    })
+  },
   delete(params = {}) {
     return ajax({
       method: 'post',

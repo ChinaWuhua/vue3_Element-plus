@@ -1,16 +1,17 @@
 <template>
   <div class="goodlist">
     <div class="tools">
-      <el-button type="primary" icon="el-icon-plus" @click="add">新增商品</el-button>
       <div class="treeChose">
         <el-input v-model="ProductTypeName" readonly></el-input>
         <tree-input @tree-chose="treeChose" text="按品类查找" />
         <el-button @click="clear" style="margin-left: 6px;">清空</el-button>
+        <el-button :disabled="loading" icon="el-icon-refresh" @click="getList" style="margin-left: 6px;">刷新数据</el-button>
       </div>
     </div>
     <el-table
       v-loading="loading"
       border
+      height="300"
       :data="tableData"
       style="width: 100%;">
       <el-table-column
@@ -78,12 +79,11 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="操作"
-        width="150"
+        label="选择"
+        width="80"
         fixed="right">
         <template #default="scope">
-          <el-button type="primary" @click="edit(scope)">修改</el-button>
-          <el-button type="danger" @click="remove(scope)">删除</el-button>
+          <el-button type="primary" @click="chosed(scope.row)">选择</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,6 +110,9 @@ export default {
     this.getList()
   },
   methods: {
+    chosed(row) {
+      this.$emit('choseGoods', row)
+    },
     clear() {
       this.ProductTypeName = ''
       this.ProductTypeId = ''
@@ -136,44 +139,6 @@ export default {
           console.log('-----fail----', err)
         })
     },
-    add() {
-      this.$router.push('/goodslist/add')
-    },
-    edit(scope) {
-      this.$router.push({
-        name: 'goodslist-add',
-        params: {
-          mode: 'edit',
-          data: JSON.stringify(scope.row)
-        }
-      })
-    },
-    remove(scope) {
-      this
-        .$confirm(`将删除【${scope.row.ProductName}】并且不可恢复, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-        .then(() => {
-          this.loading = true
-          api
-            .delete({Uuid: scope.row.Uuid})
-            .then(res => {
-              this.loading = false
-              if (res.status === 200) {
-                this.$message.success(res.msg)
-                this.getList()
-              } else {
-                this.$message.error(res.msg)
-              }
-            })
-            .catch(err => {
-              this.loading = false
-              this.$message.error(err.msg)
-            })
-        })
-    }
   }
 };
 </script>

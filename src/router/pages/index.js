@@ -61,6 +61,11 @@ export default [{
   component: () => import('@/views/GoodsManager/GoodsSuit/index.vue'),
   meta: { label: '套装商品' }
 }, {
+  path: '/goodsSuit/add',
+  name: 'goodsSuit-add',
+  component: () => import('@/views/GoodsManager/GoodsSuit/detail.vue'),
+  meta: { label: '新增套装' }
+}, {
   path: '/saleList',
   name: 'saleList',
   component: () => import('@/views/Sale/index.vue'),
